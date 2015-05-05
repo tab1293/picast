@@ -14,6 +14,7 @@
 		F4C927D91AF2C8DE007E130A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4C927D81AF2C8DE007E130A /* Images.xcassets */; };
 		F4C927DC1AF2C8DE007E130A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4C927DA1AF2C8DE007E130A /* LaunchScreen.xib */; };
 		F4C927E81AF2C8DE007E130A /* picastTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C927E71AF2C8DE007E130A /* picastTests.m */; };
+		F4C9280F1AF43AF1007E130A /* NetworkRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C9280E1AF43AF1007E130A /* NetworkRunner.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,8 @@
 		F4C927E11AF2C8DE007E130A /* picastTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = picastTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4C927E61AF2C8DE007E130A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F4C927E71AF2C8DE007E130A /* picastTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = picastTests.m; sourceTree = "<group>"; };
+		F4C9280D1AF43A8B007E130A /* NetworkRunner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetworkRunner.h; sourceTree = "<group>"; };
+		F4C9280E1AF43AF1007E130A /* NetworkRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkRunner.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +84,8 @@
 		F4C927CA1AF2C8DE007E130A /* picast */ = {
 			isa = PBXGroup;
 			children = (
+				F4C9280D1AF43A8B007E130A /* NetworkRunner.h */,
+				F4C9280E1AF43AF1007E130A /* NetworkRunner.m */,
 				F4C927CF1AF2C8DE007E130A /* AppDelegate.h */,
 				F4C927D01AF2C8DE007E130A /* AppDelegate.m */,
 				F4C927D21AF2C8DE007E130A /* ViewController.h */,
@@ -221,6 +226,7 @@
 			files = (
 				F4C927D41AF2C8DE007E130A /* ViewController.m in Sources */,
 				F4C927D11AF2C8DE007E130A /* AppDelegate.m in Sources */,
+				F4C9280F1AF43AF1007E130A /* NetworkRunner.m in Sources */,
 				F4C927CE1AF2C8DE007E130A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -416,6 +422,7 @@
 				F4C927ED1AF2C8DE007E130A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F4C927EE1AF2C8DE007E130A /* Build configuration list for PBXNativeTarget "picastTests" */ = {
 			isa = XCConfigurationList;
@@ -424,6 +431,7 @@
 				F4C927F01AF2C8DE007E130A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
