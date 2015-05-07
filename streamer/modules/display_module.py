@@ -14,9 +14,9 @@ class DisplayModule(VlcModule):
 		self.setOption('novideo')
 
 	def setDelay(self, delay):
-		if(type(delay)==int)
+		if type(delay)== int:
 			self.setOption('delay', delay)
-		else 
+		else:
 			raise ValueError("Delay must be an integer")
 
 	def getDelay(self):
