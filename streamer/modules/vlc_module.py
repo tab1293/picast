@@ -48,7 +48,7 @@ class VlcModule:
                 self.validateParamOpts(param, param_opts, valid_param_opts)
                 self._options.append([opt_name, param, param_opts])
             else:
-                raise NameError("{0} is not a valid param for option {1}".format(parm, opt_name))
+                raise NameError("{0} is not a valid param for option {1}".format(param, opt_name))
         # Assume the child class has validified the parameter
         else:
             self._options.append([opt_name, param, param_opts])

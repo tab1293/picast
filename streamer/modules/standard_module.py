@@ -6,7 +6,7 @@ class StandardModule(VlcModule):
     _access_param_opts = {
         'udp': [('caching', int), ('ttl', int), ('group', int), ('late', int)],
         'http': [('user', str), ('pwd', str), ('mime', str)],
-        'https': [('cert', str), ('key', str), ('ca', str), ('crl', str)]
+        'https': [('cert', str), ('key', str), ('ca', str), ('crl', str)],
         'livehttp': [('splitanywhere', bool), ('seglen', int), ('numsegs', int), ('delsegs', bool), ('index', str), ('index-url', str), ('ratecontrol', bool)]
     }
 
@@ -20,7 +20,7 @@ class StandardModule(VlcModule):
     }
 
     def __init__(self):
-        super().__init__('standard')
+        VlcModule.__init__(self, 'standard')
 
     def setAccess(self, access, access_options=[]):
         self.setOption('access', access, self._access_params, access_options, self._access_param_opts)
