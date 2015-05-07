@@ -20,7 +20,6 @@ class HttpHandler(tornado.web.RequestHandler):
         elif command == "play":
             streamer.play()
             self.write("Playing")
-
         elif command == "pause":
             streamer.pause()
             self.write("Paused")
@@ -28,6 +27,6 @@ class HttpHandler(tornado.web.RequestHandler):
             streamer.stop()
             self.write("Stopped")
         elif command == "list":
-            self.write({'file_paths': gui.listVideoFiles()})
+            self.write(gui.getVideos())
         elif command == "test":
             self.write("Test command")

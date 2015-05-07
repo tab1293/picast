@@ -12,6 +12,8 @@ from streamer import Streamer
 
 import tornado.ioloop
 import tornado.web
+import requests
+import urllib
 from http_handler import HttpHandler
 
 import os.path
@@ -30,6 +32,7 @@ class StreamerWindow(QWidget):
         self.initUI()
         self.updateFolderList()
         self.loadVideos()
+        print (self._settings['videos'])
 
     def initWatcher(self):
         self.fs_watcher  = QtCore.QFileSystemWatcher(self._settings['folders'])
@@ -130,18 +133,28 @@ class StreamerWindow(QWidget):
             for f in q_dir.entryInfoList():
                 mimeType = mime.from_file(f.absoluteFilePath())
                 matchObj = re.match(r"video/.+$", mimeType.decode('utf-8'))
-                print(str(mimeType))
                 if matchObj is not None and f.absoluteFilePath() not in self._settings['videos']:
-                    self.parseVideo(str(f.absoluteFilePath()))
+                    self.parseVideo(f)
 
-    def parseVideo(self, filename):
-        matchObj = re.match(r"((\w+\.)+)([0-9]{4})", filename)
+    def parseVideo(self, f):
+        matchObj = re.match(r"((\w+\.)+)([0-9]{4})", f.fileName())
         if matchObj:
             title = matchObj.group(1).rstrip('.').replace('.', ' ')
-            print(title)
+            year = matchObj.group(3)
+            info = self.fetchVideoInfo(title, year)
+            info['filename'] = f.fileName()
+            self._settings['videos'][f.absoluteFilePath()] = info
+        else:
+            self._settings['videos'][f.absoluteFilePath()] = {'filename': f.fileName()}
+
+    def fetchVideoInfo(self, title, year):
+        url = "http://www.omdbapi.com/?t={0}&y={1}&plot=short&r=json".format(urllib.parse.quote(title), urllib.parse.quote(year))
+        r = requests.get(url)
+        data = r.json()
+        return data
 
     def getVideos(self):
-        return self._settings['videos']     
+        return self._settings['videos']
 
     def closeEvent(self, event):
         self.writeSettings()
