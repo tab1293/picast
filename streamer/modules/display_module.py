@@ -15,7 +15,10 @@ class DisplayModule(VlcModule):
 
 	#TODO: check that this parameter is valid
 	def setDelay(self, delay):
-		self.setOption('delay', delay)
+		if(type(delay)==int)
+			self.setOption('delay', delay)
+		else 
+			raise ValueError("Delay must be an integer")
 
 	def getDelay(self):
 		self.getOption('delay')
