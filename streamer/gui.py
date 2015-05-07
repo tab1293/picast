@@ -1,118 +1,163 @@
 import sys
-from PyQt4 import QtCore, QtGui
-import tornado.httpclient
-from tornado.httputil import url_concat
+import os
+import re
+from threading import Thread
+import json
+
+
+from PyQt5 import QtCore, QtWidgets, QtGui
+from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget
 
 from streamer import Streamer
-from http_handler import HttpHandler
 
 import tornado.ioloop
 import tornado.web
-from threading import Thread
+from http_handler import HttpHandler
 
-class StreamerWindow(QtGui.QWidget):
+import os.path
+from appdirs import *
+
+import magic
+
+
+class StreamerWindow(QWidget):
     
     def __init__(self, streamer):
-        super(StreamerWindow, self).__init__()
+        super().__init__()
 
-        self.streamer = streamer
-
-        # self.process = QtCore.QProcess(self)
-        # self.process.start('python',['http_server.py'])
-
-        self.videoFiles = self.loadVideoFiles()
-        self.http_client = tornado.httpclient.HTTPClient()
-
+        self._settings = self.loadSettings()
+        self.initWatcher()
         self.initUI()
+        self.updateFolderList()
+        self.loadVideos()
 
-    def loadVideoFiles(self):
-        return QtCore.QDir("/home/tom/Videos").entryInfoList()
-        
+    def initWatcher(self):
+        self.fs_watcher  = QtCore.QFileSystemWatcher(self._settings['folders'])
+        self.fs_watcher.directoryChanged.connect(self.loadVideos)
+
         
     def initUI(self):
-        # Create buttons
-        playIcon = QtGui.QIcon.fromTheme('media-playback-start')
-        pauseIcon = QtGui.QIcon.fromTheme('media-playback-pause')
-        stopIcon = QtGui.QIcon.fromTheme('media-playback-stop')
-        self.playPauseButton = QtGui.QPushButton(playIcon, "Stream")
 
-        # Connect buttons
-        self.connect(self.playPauseButton, QtCore.SIGNAL("released()"), self.streamClick)
+        self.folderList = QtWidgets.QListWidget()
 
-        # Create button layout
-        self.buttonLayout = QtGui.QHBoxLayout()
-        self.buttonLayout.addWidget(self.playPauseButton)
-
-        # Create filelist
-        self.fileList = QtGui.QListWidget()
-        for f in self.videoFiles:
-            item = QtGui.QListWidgetItem(f.fileName())
-            item.setData(QtCore.Qt.UserRole, f.filePath())
-            self.fileList.addItem(item)
-
-        # Create main layout
-        self.layout = QtGui.QVBoxLayout()
-        self.layout.addWidget(self.fileList)
+        self.layout = QtWidgets.QVBoxLayout()
+        self.layout.addWidget(QtWidgets.QLabel("Folders to monitor"))
+        self.layout.addWidget(self.folderList)
+        self.buttonLayout = QtWidgets.QHBoxLayout()
+        self.buttonLayout.addStretch(1)
+        self.addFolderButton = QtWidgets.QPushButton("Add folder")
+        self.addFolderButton.clicked.connect(self.onAddFolderClicked)
+        self.removeFolderButton = QtWidgets.QPushButton("Remove folder")
+        self.removeFolderButton.clicked.connect(self.onRemoveFolderClicked)
+        self.buttonLayout.addWidget(self.removeFolderButton)
+        self.buttonLayout.addWidget(self.addFolderButton)
         self.layout.addLayout(self.buttonLayout)
 
-        # Set the main layout
-        self.setLayout(self.layout)
 
-        # Create window, center it, a'set' or snd show it
-        self.setGeometry(0, 0, 800, 500)
+        self.setLayout(self.layout)
+        self.setGeometry(300, 300, 500, 400)
+        self.setWindowTitle('PiCast')
         self.center()
         self.show()
 
     def center(self):
         qr = self.frameGeometry()
-        cp = QtGui.QDesktopWidget().availableGeometry().center()
+        cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
-    def streamClick(self):
-        listItem = self.fileList.currentItem()
-        fileName = listItem.text()
-        filePath = listItem.data(QtCore.Qt.UserRole).toString()
+    def loadSettings(self):
+        self._settings_folder = user_data_dir("PiCast", "TAB")
+        self._settings_file = self._settings_folder + "/settings.json"
+        print(self._settings_file)
 
-        if self.streamer.broadcast != fileName:
-            self.streamer.set(str(fileName), str(filePath))
-            self.streamer.play()
-            
-        # self.http_client.fetch('http://192.168.1.139:8085/togglePause')
+        if os.path.isfile(self._settings_file):
+            with open(self._settings_file) as f:
+                return json.load(f)
+        else:
+            if not os.path.exists(self._settings_folder):
+                os.makedirs(self._settings_folder)
+
+            with open(self._settings_file, 'w') as f:
+                settings = {
+                    'folders': [],
+                    'videos': {}
+                }
+                json.dump(settings, f)
+
+            return settings
+
+    def writeSettings(self):
+        with open(self._settings_file, 'w') as f:
+            json.dump(self._settings, f)
+
+    def onFolderChange(self, path):
+        print(path)
+
+    def onAddFolderClicked(self):
+        fileDialog = QtWidgets.QFileDialog()
+        fileDialog.setFileMode(QtWidgets.QFileDialog.Directory)
+        fileDialog.setOption(QtWidgets.QFileDialog.ShowDirsOnly)
+        fileDialog.setDirectory(os.path.expanduser('~'))
+        fileDialog.exec()
+        folders = fileDialog.selectedFiles()
+        for folder in folders:
+            self._settings['folders'].append(folder)
+
+        self.initWatcher()
+        self.updateFolderList()
+        self.loadVideos()
+
+    def updateFolderList(self):
+        self.folderList.clear()
+        for folder in self._settings['folders']:
+            item = QtWidgets.QListWidgetItem(folder)
+            item.setData(QtCore.Qt.UserRole, folder)
+            self.folderList.addItem(item)
+
+    def onRemoveFolderClicked(self):
+        folderName = self.folderList.currentItem().text()
+        row = self.folderList.currentRow()
+        self.folderList.takeItem(row)
+        self._settings['folders'].remove(folderName)
+        self.updateFolderList()
+
+    def loadVideos(self):
+        mime = magic.Magic(mime=True)
+        for folder in self._settings['folders']:
+            q_dir = QtCore.QDir(folder)
+            q_dir.setFilter(QtCore.QDir.Files)
+            for f in q_dir.entryInfoList():
+                mimeType = mime.from_file(f.absoluteFilePath())
+                matchObj = re.match(r"video/.+$", mimeType.decode('utf-8'))
+                print(str(mimeType))
+                if matchObj is not None and f.absoluteFilePath() not in self._settings['videos']:
+                    self.parseVideo(str(f.absoluteFilePath()))
+
+    def parseVideo(self, filename):
+        matchObj = re.match(r"((\w+\.)+)([0-9]{4})", filename)
+        if matchObj:
+            title = matchObj.group(1).rstrip('.').replace('.', ' ')
+            print(title)
+
+    def getVideos(self):
+        return self._settings['videos']     
 
     def closeEvent(self, event):
-         tornado.ioloop.IOLoop.instance().stop()
-
-def main():
-    app = QtGui.QApplication(sys.argv)
+        self.writeSettings()
+        tornado.ioloop.IOLoop.instance().stop()
+        
+if __name__ == '__main__':
+    
+    app = QApplication(sys.argv)
     streamer = Streamer()
-    application = tornado.web.Application([
-        (r"/(set|play|pause|stop|test)", HttpHandler),
-    ], debug=True, streamer=streamer)
-    application.listen(8888)
+    w = StreamerWindow(streamer)
+
+    web_app = tornado.web.Application([
+        (r"/(set|play|pause|stop|list|test)", HttpHandler),
+    ], debug=True, streamer=streamer, gui=w)
+    web_app.listen(8888)
     t = Thread(target=lambda: tornado.ioloop.IOLoop.instance().start())
     t.start()
 
-    w = StreamerWindow(streamer)
-    sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    main()    
-
-# if __name__ == "__main__":
-#     ioloop = tornado.ioloop.IOLoop.instance()
-#     application = tornado.web.Application([
-#         (r"/vlc/(set|play|pause|stop|test)", VlcHandler),
-#     ], ioloop=ioloop, vlc_instance=vlc.Instance(), debug=True)
-#     application.listen(8085)
-#     ioloop.start()
-
-
-# app = QtGui.QApplication([])
-# icon = QtGui.QSystemTrayIcon(QtGui.QIcon("test.png"), app)
-# menu = QtGui.QMenu()
-# menu.addAction("Quit", QtGui.qApp.quit)
-# icon.setContextMenu(menu)
-# icon.show()
-# app.exec_()
+    sys.exit(app.exec_())  
