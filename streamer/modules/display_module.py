@@ -13,7 +13,6 @@ class DisplayModule(VlcModule):
 	def setNovideo(self):
 		self.setOption('novideo')
 
-	#TODO: check that this parameter is valid
 	def setDelay(self, delay):
 		if(type(delay)==int)
 			self.setOption('delay', delay)
