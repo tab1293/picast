@@ -5,7 +5,7 @@ class DisplayModule(VlcModule):
 	_display_params = ['delay']
 
 	def __init__(self):
-		VlcModule.__init__(self, 'display')
+		super().__init__('display')
 
 	def setNoaudio(self):
 		self.setOption('noaudio')

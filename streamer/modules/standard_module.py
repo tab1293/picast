@@ -20,7 +20,7 @@ class StandardModule(VlcModule):
     }
 
     def __init__(self):
-        VlcModule.__init__(self, 'standard')
+        super().__init__('standard')
 
     def setAccess(self, access, access_options=[]):
         self.setOption('access', access, self._access_params, access_options, self._access_param_opts)
