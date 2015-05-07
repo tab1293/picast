@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "NetworkRunner.h"
 
 @interface ViewController ()
 
@@ -16,12 +17,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [UIApplication sharedApplication].keyWindow.rootViewController = self;
     // Do any additional setup after loading the view, typically from a nib.
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (UIViewController*)getViewController {
+    return self;
+}
+
+- (IBAction)broadcastClick:(id)sender {
+    [NetworkRunner broadcast];
 }
 
 @end

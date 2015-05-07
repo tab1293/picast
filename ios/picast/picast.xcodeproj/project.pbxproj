@@ -28,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F4B7950E1AFB287000366973 /* Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		F4C927C81AF2C8DE007E130A /* picast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = picast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4C927CC1AF2C8DE007E130A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F4C927CD1AF2C8DE007E130A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -94,6 +95,7 @@
 				F4C927D81AF2C8DE007E130A /* Images.xcassets */,
 				F4C927DA1AF2C8DE007E130A /* LaunchScreen.xib */,
 				F4C927CB1AF2C8DE007E130A /* Supporting Files */,
+				F4B7950E1AFB287000366973 /* Utils.h */,
 			);
 			path = picast;
 			sourceTree = "<group>";

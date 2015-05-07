@@ -10,6 +10,7 @@
 
 @interface ViewController : UIViewController
 
+- (UIViewController*)getViewController;
 
 @end
 
