@@ -1,7 +1,5 @@
 from .vlc_module import VlcModule
 
-# TODO: Not sure if this needs anything else.
-# 			Only based off of standard_module.py.
 class DisplayModule(VlcModule):
 
 	_display_params = ['delay']
@@ -15,6 +13,7 @@ class DisplayModule(VlcModule):
 	def setNovideo(self):
 		self.setOption('novideo')
 
+	#TODO: check that this parameter is valid
 	def setDelay(self, delay):
 		self.setOption('delay', delay)
 
