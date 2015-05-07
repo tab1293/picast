@@ -1,0 +1,7 @@
+{
+    "name": "Picast",
+    "main": "index.html",
+    "window": {
+        "toolbar": false
+    }
+}

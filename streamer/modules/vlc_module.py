@@ -1,34 +1,36 @@
 from types import *
 
-class VlcModule:
-
-    _options = []
-
-    _valid_modules = ['standard', 'transcode', 'duplicate', 'display', 'rtp', 'es']
+class VlcModule(object):
 
     def __init__(self, name):
+        self._options = []
+        self._valid_modules = ['standard', 'transcode', 'duplicate', 'display', 'rtp', 'es']
         if name not in self._valid_modules:
             raise ValueError('Not a valid module name')
 
         self._name = name
 
     def __str__(self):
+        print(self._options)
         output = self._name + "{"
         for i, option in enumerate(self._options):
             if option[1]:
                 output += "{0}={1}".format(option[0], option[1])
                 if option[2]:
                     output += '{'
-                    for j, parameter_option in enumerate(option[2]):
-                        if type(parameter_option[1]) == bool:
-                            output += parameter_option[0]
+                    j = 0
+                    for k, parameter_option in option[2].items():
+                        if type(parameter_option) == bool:
+                            output += k
                         else:
-                            output += "{0}={1}".format(parameter_option[0], parameter_option[1])
+                            output += "{0}={1}".format(k, parameter_option)
 
                         if j == len(option[2]) - 1:
                             output += '}'
                         else:
                             output += ','
+
+                        j = j + 1
             else:
                 output += option[0]
 
@@ -60,22 +62,26 @@ class VlcModule:
 
         return None
 
-    # TODO: Needs fixing. Non functional for checking parameter options
+
+    # TODO: Needs to be checked
     def validateParamOpts(self, param, param_opts, valid_param_opts):
         if not param_opts:
             return True
 
-        for param_opt in param_opts:
-                if param in valid_param_opts:
-                    for valid_opt in valid_param_opts[param]:
-                        if param_opt[0] != valid_opt[0]:
-                            raise NameError("{0} is not a valid option name for parameter {1} of the {2} module".format(param_opt[0], param, self._name))
-
-                        if type(param_opt[1]) != type(valid_opt[1]):
-                            raise TypeError("{0} is not the correct type for option {1} paramater {2} of the {3} module".format(type(param_opt[1], param_opt[0], param, self._name)))
-                   
+        if param in valid_param_opts:
+            valid_param_opts = valid_param_opts[param]
+            print(valid_param_opts)
+            for k, param_opt in param_opts.items():
+                print(k)
+                print(valid_param_opts)
+                if k in valid_param_opts:
+                    if type(param_opt) == valid_param_opts[k]:
+                        continue
+                    else:
+                        raise ValueError("The parameter option is not of the correct type")
                 else:
-                    raise NameError("{0} parameter for {1} option not does have any options to be set".format(param, opt_name))
+                    raise ValueError("This is not a valid parameter option to be set")
+        else:
+            raise ValueError("This paramter has no options to be set")
 
-                return True
-
+        return True

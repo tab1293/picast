@@ -1,0 +1,15 @@
+<html>
+<body>
+<script type="text/javascript" src="./js/jquery-1.11.3.js"></script>
+<script type="text/javascript">
+    $(function() {
+        $.get('http://192.168.1.100:8888/list', function(data) {
+            console.log(data);
+            document.write(data['file_paths']);
+        });
+        // var os = require('os')
+        // document.write('Our computer is: ', os.platform())
+    });
+</script>
+</body>
+</html>

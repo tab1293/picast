@@ -1,5 +1,8 @@
 import vlc
 
+from modules import StandardModule
+from chains import Chain
+
 class Streamer():
 
     def __init__(self):
@@ -13,15 +16,23 @@ class Streamer():
     def doneCb(self, event):
         print("Seen the done event " + str(event))
 
-    def set(self, name, input, transcode_chain):
+    def set(self, name, input, chain=None):
         if self.broadcast is not None:
             self.stop()
 
-        self.instance.vlm_add_broadcast(name, i, str(transcode_chain), 0, None, True, False)
+        if chain is None:
+            sm = StandardModule()
+            sm.setAccess('http')
+            sm.setMux('ts')
+            sm.setDst(':8080')
+            chain = Chain()
+            chain.addModule(sm)
+
+        self.instance.vlm_add_broadcast(name, input, str(chain), 0, None, True, False)
         self.broadcast = name
         self.state = 'set'
 
-    
+
 
     # def set(self, name, i, transcode=None, output=None):
     #     if self.broadcast is not None:
