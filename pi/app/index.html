@@ -23,10 +23,22 @@
     </div>
 </script>
 <script type="text/javascript">
-    var exec = require('child_process').exec;
+    var omx = require('omxcontrol');
 
     $(function() {
         var template = $('#videoTemplate').html();
+
+        $(document).bind('keydown',function(e){
+            if(e.keyCode == 80) {
+                console.log('p pressed')
+                omx.pause();
+            }
+            else if(e.keyCode == 81) {
+                console.log('q pressed')
+                omx.quit()
+            }
+        });
+
         $.get('http://192.168.1.100:8888/list', function(data) {
             console.log(JSON.stringify(data));
 
@@ -41,13 +53,8 @@
                 var filepath = $(this).attr('id');
                 $.get('http://192.168.1.100:8888/set', {'i': filepath}, function(data) {
                     $.get('http://192.168.1.100:8888/play', function(data) {
-                        exec('/usr/bin/omxplayer -o hdmi http://192.168.1.100:8080', function(error, stdout, stderr) {
-                            console.log('stdout: ', stdout);
-                            console.log('stderr: ', stderr);
-                            if (error !== null) {
-                                console.log('exec error: ', error);
-                            }
-                        });
+                        omx.start('http://192.168.1.100:8080');
+                        // child = process.spawn('/usr/bin/omxplayer ', ['-o', 'hdmi', 'http://192.168.1.100:8080']);
                     });
                 });
             });
