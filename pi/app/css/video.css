@@ -9,3 +9,7 @@
 .container .video-info {
     float: left;
 }
+
+.caption p {
+    margin: 0px;
+}

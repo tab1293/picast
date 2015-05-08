@@ -1,18 +1,18 @@
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="./css/video.css">
 <script type="text/javascript" src="./js/jquery-1.11.3.js"></script>
+<script type="text/javascript" src="./js/bootstrap.min.js"></script>
 <script type="text/javascript" src="./js/handlebars-v3.0.3.js"></script>
 <script id="videoTemplate" type="text/x-handlebars-template">
-    <div class="video">
-        <div class="container">
+    <div id="{{filepath}}" class="video col-lg-3">
+        <div class="thumbnail">
             <img class="poster" {{#if Poster}} src="{{Poster}}" {{else}} src="./img/no-poster.jpg" {{/if}}></img>
-            <div class="video-info">
+            <div class="caption">
                 {{#if Title}} 
                     <p class="title">{{Title}}</p>
                     <p class="genre">{{Genre}}</p>
-                    <p class="actors">with {{Actors}}</p>
-                    <p class="plot">{{Plot}}</p>
                     <p class="rating">IMDB Rating: {{imdbRating}}</p>
                     <p class="misc">Rated: {{Rated}} Runtime: {{Runtime}}</p>
                 {{else}} 
@@ -23,20 +23,45 @@
     </div>
 </script>
 <script type="text/javascript">
+    var exec = require('child_process').exec;
+
     $(function() {
         var template = $('#videoTemplate').html();
         $.get('http://192.168.1.100:8888/list', function(data) {
-            for (var filePath in data) {
-                var video = Handlebars.compile(template);
-                $('#videos').append(video(data[filePath]));
-            }
             console.log(JSON.stringify(data));
+
+            for (var filePath in data) {
+                var info = data[filePath];
+                info['filepath'] = filePath;
+                var video = Handlebars.compile(template);
+                $('#videos').append(video(info));
+            }
+
+            $(".video").on('click', function() {
+                var filepath = $(this).attr('id');
+                $.get('http://192.168.1.100:8888/set', {'i': filepath}, function(data) {
+                    $.get('http://192.168.1.100:8888/play', function(data) {
+                        exec('/usr/bin/omxplayer -o hdmi http://192.168.1.100:8080', function(error, stdout, stderr) {
+                            console.log('stdout: ', stdout);
+                            console.log('stderr: ', stderr);
+                            if (error !== null) {
+                                console.log('exec error: ', error);
+                            }
+                        });
+                    });
+                });
+            });
         });
+        
     });
+
 </script>
 </head>
 <body>
-<div id="videos">
+<div class="container" id="videos">
+    <div id="videos" class="row">
+    </div>
 </div>
+
 </body>
 </html>
