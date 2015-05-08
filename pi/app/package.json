@@ -1,7 +1,7 @@
 {
     "name": "Picast",
-    "main": "index.html",
-    "window": {
-        "toolbar": false
-    }
+    "main": "index.html"
+    // "window": {
+        // "toolbar": false
+    // }
 }

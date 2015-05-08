@@ -28,6 +28,7 @@ class Streamer():
             chain = Chain()
             chain.addModule(sm)
 
+        print(str(chain))
         self.instance.vlm_add_broadcast(name, input, str(chain), 0, None, True, False)
         self.broadcast = name
         self.state = 'set'
