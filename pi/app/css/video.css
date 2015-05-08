@@ -1,0 +1,11 @@
+.video {
+    float: left;
+}
+
+.container .poster {
+    float: left;
+}
+
+.container .video-info {
+    float: left;
+}

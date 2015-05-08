@@ -1,15 +1,42 @@
 <html>
-<body>
+<head>
+<link rel="stylesheet" type="text/css" href="./css/video.css">
 <script type="text/javascript" src="./js/jquery-1.11.3.js"></script>
+<script type="text/javascript" src="./js/handlebars-v3.0.3.js"></script>
+<script id="videoTemplate" type="text/x-handlebars-template">
+    <div class="video">
+        <div class="container">
+            <img class="poster" {{#if Poster}} src="{{Poster}}" {{else}} src="./img/no-poster.jpg" {{/if}}></img>
+            <div class="video-info">
+                {{#if Title}} 
+                    <p class="title">{{Title}}</p>
+                    <p class="genre">{{Genre}}</p>
+                    <p class="actors">with {{Actors}}</p>
+                    <p class="plot">{{Plot}}</p>
+                    <p class="rating">IMDB Rating: {{imdbRating}}</p>
+                    <p class="misc">Rated: {{Rated}} Runtime: {{Runtime}}</p>
+                {{else}} 
+                    <p class="filename">{{filename}}</p>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</script>
 <script type="text/javascript">
     $(function() {
+        var template = $('#videoTemplate').html();
         $.get('http://192.168.1.100:8888/list', function(data) {
-            console.log(data);
-            document.write(data);
+            for (var filePath in data) {
+                var video = Handlebars.compile(template);
+                $('#videos').append(video(data[filePath]));
+            }
+            console.log(JSON.stringify(data));
         });
-        // var os = require('os')
-        // document.write('Our computer is: ', os.platform())
     });
 </script>
+</head>
+<body>
+<div id="videos">
+</div>
 </body>
 </html>
