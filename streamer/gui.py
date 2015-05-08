@@ -32,7 +32,7 @@ class StreamerWindow(QWidget):
         self.initUI()
         self.updateFolderList()
         self.loadVideos()
-        print (self._settings['videos'])
+        # print (self._settings['videos'])
 
     def initWatcher(self):
         self.fs_watcher  = QtCore.QFileSystemWatcher(self._settings['folders'])
@@ -72,7 +72,7 @@ class StreamerWindow(QWidget):
     def loadSettings(self):
         self._settings_folder = user_data_dir("PiCast", "TAB")
         self._settings_file = self._settings_folder + "/settings.json"
-        print(self._settings_file)
+        # print(self._settings_file)
 
         if os.path.isfile(self._settings_file):
             with open(self._settings_file) as f:

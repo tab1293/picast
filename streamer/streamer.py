@@ -10,8 +10,19 @@ class Streamer():
         self.event_manager = self.instance.vlm_get_event_manager()
         self.event_manager.event_attach(vlc.EventType.VlmMediaInstanceStatusEnd , self.doneCb) 
 
+        self.setModuleChain()
         self.broadcast = None
         self.state = None
+
+
+    def setModuleChain(self):
+        sm = StandardModule()
+        sm.setAccess('http')
+        sm.setMux('ts')
+        sm.setDst(':8080')
+        self.default_chain = Chain()
+        self.default_chain.addModule(sm)
+
 
     def doneCb(self, event):
         print("Seen the done event " + str(event))
@@ -21,12 +32,7 @@ class Streamer():
             self.stop()
 
         if chain is None:
-            sm = StandardModule()
-            sm.setAccess('http')
-            sm.setMux('ts')
-            sm.setDst(':8080')
-            chain = Chain()
-            chain.addModule(sm)
+            chain = self.default_chain
 
         print(str(chain))
         self.instance.vlm_add_broadcast(name, input, str(chain), 0, None, True, False)
