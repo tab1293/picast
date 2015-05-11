@@ -1,10 +1,11 @@
 import sys
 import os
 import re
-from threading import Thread
+import socket
 import json
+import functools
 
-
+from threading import Thread
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget
 
@@ -159,6 +160,11 @@ class StreamerWindow(QWidget):
     def closeEvent(self, event):
         self.writeSettings()
         tornado.ioloop.IOLoop.instance().stop()
+
+
+def broadcastHandler(sock, fd, events):
+    (data, source_ip_port) = sock.recvfrom(4096)
+    print(data, source_ip_port)
         
 if __name__ == '__main__':
     
@@ -166,11 +172,22 @@ if __name__ == '__main__':
     streamer = Streamer()
     w = StreamerWindow(streamer)
 
+    # Set up web application
     web_app = tornado.web.Application([
         (r"/(set|play|pause|stop|list|test)", HttpHandler),
     ], debug=True, streamer=streamer, gui=w)
     web_app.listen(8888)
-    t = Thread(target=lambda: tornado.ioloop.IOLoop.instance().start())
+
+    # Set up UDP broadcast server
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.bind(('', 12345))
+    s.setblocking(0)
+
+    io_loop = tornado.ioloop.IOLoop.instance()
+    udp_callback = functools.partial(broadcastHandler, s)
+    io_loop.add_handler(s.fileno(), udp_callback, io_loop.READ)
+
+    t = Thread(target=lambda: io_loop.start())
     t.start()
 
     sys.exit(app.exec_())  
