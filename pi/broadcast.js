@@ -5,7 +5,7 @@ var client = dgram.createSocket("udp4");
 
 client.bind(function() {
     client.setBroadcast(true);
-    client.send(message, 0, message.length, 12345, "131.179.17.255", function(err) {
+    client.send(message, 0, message.length, 12345, "255.255.255.255", function(err) {
         client.close();
     });
 });

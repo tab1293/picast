@@ -161,8 +161,8 @@ void socketCallback(CFSocketRef s,
     memset(&addr, 0, sizeof(struct sockaddr_in));
     addr.sin_len = sizeof(struct sockaddr_in);
     addr.sin_family = AF_INET;
-    addr.sin_port = htons(1900);
-    addr.sin_addr.s_addr = htonl(INADDR_BROADCAST);
+    addr.sin_port = htons(12345);
+    addr.sin_addr.s_addr = inet_addr("255.255.255.255");
     
     CFDataRef portData = CFDataCreate(kCFAllocatorDefault,
                                             (UInt8*)(&addr),
@@ -174,7 +174,7 @@ void socketCallback(CFSocketRef s,
     }
 
     // Data we intend to send
-    char buffer[] = "some data";
+    char buffer[] = "myIP:4000";
     CFDataRef sendData = CFDataCreate(kCFAllocatorDefault,
                                       (UInt8*)(&buffer),
                                       sizeof(buffer));

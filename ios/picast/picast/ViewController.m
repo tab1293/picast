@@ -4,8 +4,9 @@
 //
 //  Created by Alexander Yang on 4/30/15.
 //  Copyright (c) 2015 Alexander Yang. All rights reserved.
-//
 
+@import AVKit;
+@import AVFoundation;
 #import "ViewController.h"
 #import "NetworkRunner.h"
 // #import "Utils.h"
@@ -39,6 +40,12 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    AVPlayerViewController* destination = (AVPlayerViewController*)segue.destinationViewController;
+    NSURL* url = [[NSURL alloc] initWithString: @"http://www.ebookfrenzy.com/ios_book/movie/movie.mov"];
+    destination.player = [[AVPlayer alloc] initWithURL: url];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

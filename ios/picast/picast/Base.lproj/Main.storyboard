@@ -40,7 +40,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="HDb-hg-BVH" kind="show" id="70e-Gb-xdg"/>
+                                    <segue destination="YXj-mu-FCm" kind="show" id="IGT-et-GWK"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -59,24 +59,15 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="561" y="401"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="nee-9V-cpY">
+        <!--AV Player View Controller-->
+        <scene sceneID="mRe-nZ-Sq9">
             <objects>
-                <viewController id="HDb-hg-BVH" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="qyQ-EB-hVD"/>
-                        <viewControllerLayoutGuide type="bottom" id="sRD-fR-XUF"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="oTJ-gw-HPq">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7MW-XI-3q9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <avPlayerViewController videoGravity="AVLayerVideoGravityResizeAspect" id="YXj-mu-FCm" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Wbd-X6-Mfn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1278" y="401"/>
+            <point key="canvasLocation" x="1237" y="401"/>
         </scene>
     </scenes>
 </document>

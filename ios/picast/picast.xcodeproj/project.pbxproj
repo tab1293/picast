@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F470AADB1B006ECB001BEB87 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F470AADA1B006ECB001BEB87 /* AVKit.framework */; };
 		F4C927CE1AF2C8DE007E130A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C927CD1AF2C8DE007E130A /* main.m */; };
 		F4C927D11AF2C8DE007E130A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C927D01AF2C8DE007E130A /* AppDelegate.m */; };
 		F4C927D41AF2C8DE007E130A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C927D31AF2C8DE007E130A /* ViewController.m */; };
@@ -15,7 +16,6 @@
 		F4C927DC1AF2C8DE007E130A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F4C927DA1AF2C8DE007E130A /* LaunchScreen.xib */; };
 		F4C927E81AF2C8DE007E130A /* picastTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C927E71AF2C8DE007E130A /* picastTests.m */; };
 		F4C9280F1AF43AF1007E130A /* NetworkRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C9280E1AF43AF1007E130A /* NetworkRunner.m */; };
-		F4E8BD261B001A6E0096A359 /* ViewControllerVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = F4E8BD251B001A6E0096A359 /* ViewControllerVideo.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F470AADA1B006ECB001BEB87 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		F4B7950E1AFB287000366973 /* Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		F4C927C81AF2C8DE007E130A /* picast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = picast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4C927CC1AF2C8DE007E130A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -45,8 +46,6 @@
 		F4C927E71AF2C8DE007E130A /* picastTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = picastTests.m; sourceTree = "<group>"; };
 		F4C9280D1AF43A8B007E130A /* NetworkRunner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetworkRunner.h; sourceTree = "<group>"; };
 		F4C9280E1AF43AF1007E130A /* NetworkRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkRunner.m; sourceTree = "<group>"; };
-		F4E8BD241B001A6E0096A359 /* ViewControllerVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewControllerVideo.h; sourceTree = "<group>"; };
-		F4E8BD251B001A6E0096A359 /* ViewControllerVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewControllerVideo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F470AADB1B006ECB001BEB87 /* AVKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +70,7 @@
 		F4C927BF1AF2C8DE007E130A = {
 			isa = PBXGroup;
 			children = (
+				F470AADA1B006ECB001BEB87 /* AVKit.framework */,
 				F4C927CA1AF2C8DE007E130A /* picast */,
 				F4C927E41AF2C8DE007E130A /* picastTests */,
 				F4C927C91AF2C8DE007E130A /* Products */,
@@ -99,8 +100,6 @@
 				F4C927DA1AF2C8DE007E130A /* LaunchScreen.xib */,
 				F4C927CB1AF2C8DE007E130A /* Supporting Files */,
 				F4B7950E1AFB287000366973 /* Utils.h */,
-				F4E8BD241B001A6E0096A359 /* ViewControllerVideo.h */,
-				F4E8BD251B001A6E0096A359 /* ViewControllerVideo.m */,
 			);
 			path = picast;
 			sourceTree = "<group>";
@@ -180,6 +179,7 @@
 				TargetAttributes = {
 					F4C927C71AF2C8DE007E130A = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = QZ77VYHL33;
 					};
 					F4C927E01AF2C8DE007E130A = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -231,7 +231,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4E8BD261B001A6E0096A359 /* ViewControllerVideo.m in Sources */,
 				F4C927D41AF2C8DE007E130A /* ViewController.m in Sources */,
 				F4C927D11AF2C8DE007E130A /* AppDelegate.m in Sources */,
 				F4C9280F1AF43AF1007E130A /* NetworkRunner.m in Sources */,
@@ -361,9 +360,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = picast/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -371,9 +373,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = picast/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
