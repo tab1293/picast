@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -25,16 +26,57 @@
                                     <action selector="broadcastClick:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="RL8-9F-0Ls"/>
                                 </connections>
                             </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Zx1-PV-Bmh">
+                                <rect key="frame" x="0.0" y="99" width="600" height="501"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="vXZ-lx-hvc" id="Dig-Jo-cjc"/>
+                                    <outlet property="delegate" destination="vXZ-lx-hvc" id="Hvc-Hb-HAH"/>
+                                </connections>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yJA-0t-Yuf">
+                                <rect key="frame" x="513" y="61" width="71" height="30"/>
+                                <state key="normal" title="Test Video">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="HDb-hg-BVH" kind="show" id="70e-Gb-xdg"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Xdf-ip-ZKy" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="41" id="12p-Vk-FFJ"/>
-                            <constraint firstItem="Xdf-ip-ZKy" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="lL1-x9-4xM"/>
+                            <constraint firstItem="Xdf-ip-ZKy" firstAttribute="centerX" secondItem="Zx1-PV-Bmh" secondAttribute="centerX" id="Cms-SH-DBA"/>
+                            <constraint firstItem="Zx1-PV-Bmh" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="OOa-Ab-5Re"/>
+                            <constraint firstItem="Xdf-ip-ZKy" firstAttribute="baseline" secondItem="yJA-0t-Yuf" secondAttribute="baseline" id="VNR-vu-cw8"/>
+                            <constraint firstItem="Zx1-PV-Bmh" firstAttribute="top" secondItem="Xdf-ip-ZKy" secondAttribute="bottom" constant="8" symbolic="YES" id="Vil-O2-lpW"/>
+                            <constraint firstAttribute="trailing" secondItem="Zx1-PV-Bmh" secondAttribute="trailing" id="d4I-Bj-1mj"/>
+                            <constraint firstItem="Xdf-ip-ZKy" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="41" id="kvl-Pz-0Vz"/>
+                            <constraint firstItem="yJA-0t-Yuf" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="l0V-QH-mGJ"/>
+                            <constraint firstItem="Zx1-PV-Bmh" firstAttribute="bottom" secondItem="2fi-mo-0CV" secondAttribute="top" id="mpn-Tp-Uov"/>
                         </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="nee-9V-cpY">
+            <objects>
+                <viewController id="HDb-hg-BVH" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="qyQ-EB-hVD"/>
+                        <viewControllerLayoutGuide type="bottom" id="sRD-fR-XUF"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="oTJ-gw-HPq">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7MW-XI-3q9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1278" y="401"/>
         </scene>
     </scenes>
 </document>
