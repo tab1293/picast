@@ -9,28 +9,15 @@
 #import <Foundation/Foundation.h>
 #import "NetworkRunner.h"
 #import "Utils.h"
+#import "NetworkSocket.h"
 #import <CoreFoundation/CoreFoundation.h>
 #include <sys/socket.h> 
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-CFSocketRef serverSocket;
-
-void socketCallback(CFSocketRef s,
-                     CFSocketCallBackType type,
-                     CFDataRef addr,
-                     const void* data,
-                     void* info) {
-    
-    int x = 3;
-    x++;
-    
-    return;
-}
+NetworkSocket* _desktopSocket;
 
 @interface NetworkRunner ()
-
-+ (BOOL)setupListenSocket;
 
 @end
 
@@ -53,72 +40,7 @@ void socketCallback(CFSocketRef s,
  
 */
 
-// Used to test if we receive broadcasts as well
-
-+ (BOOL)setupListenSocket {
-    
-    serverSocket = CFSocketCreate(kCFAllocatorDefault,
-                                  PF_INET,
-                                  SOCK_DGRAM,
-                                  IPPROTO_UDP,
-                                  kCFSocketReadCallBack | kCFSocketDataCallBack,
-                                  socketCallback,
-                                  NULL);
-    
-    if (serverSocket == NULL)
-        return NO;
-    
-    struct sockaddr_in addr;
-    memset(&addr, 0, sizeof(struct sockaddr_in));
-    addr.sin_len = sizeof(struct sockaddr_in);
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(0);
-    addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    
-    CFDataRef connectionData = CFDataCreate(kCFAllocatorDefault,
-                                            (UInt8*)(&addr),
-                                            sizeof(struct sockaddr_in));
-    
-    int yes = 1;
-    setsockopt(CFSocketGetNative(serverSocket),
-               IPPROTO_IP,
-               IP_MULTICAST_IF,
-               (void*)&yes,
-               sizeof(yes));
-    
-    CFSocketError err = CFSocketSetAddress(serverSocket, connectionData);
-    
-    CFRelease(connectionData);
-    
-    if (err != kCFSocketSuccess)
-        return NO;
-    
-    
-    CFRunLoopSourceRef runRef = CFSocketCreateRunLoopSource(kCFAllocatorDefault,
-                                                            serverSocket,
-                                                            0);
-    
-    if (runRef == NULL)
-        return NO;
-    
-    CFRunLoopAddSource(CFRunLoopGetCurrent(),
-                       runRef,
-                       kCFRunLoopDefaultMode);
-    
-    CFRelease(runRef);
-    
-    
-    return YES;
-}
-
 + (void)broadcast {
-    
-    
-    if (![NetworkRunner setupListenSocket]) {
-        Alert(@"Error creating listening socket");
-        return;
-    }
-    
     
     // Setup and Create UDP Socket
     CFSocketContext context;
@@ -132,8 +54,8 @@ void socketCallback(CFSocketRef s,
                                          PF_INET,
                                          SOCK_DGRAM,
                                          IPPROTO_UDP,
-                                         kCFSocketAcceptCallBack | kCFSocketDataCallBack,
-                                         socketCallback,
+                                         kCFSocketNoCallBack,
+                                         NULL,
                                          &context);
     
     if (udpSocket == NULL) {
@@ -194,15 +116,21 @@ void socketCallback(CFSocketRef s,
     CFRelease(portData);
     CFRelease(sendData);
     CFRelease(udpSocket);
-    //CFRelease(serverSocket); // remember to remove later
 }
 
-+ (void)connect {
++ (void)initConnection {
+    
+    // Should probe for available connections here
+    _desktopSocket = [[NetworkSocket alloc] initWithURL: @"192.168.0.1:8080"];
     
 }
 
-+ (void)disconnect {
-    
++ (void)selectVideo:(NSString*)videoURL {
+    [_desktopSocket makeRequest: videoURL];
+}
+
++ (void)playVideo {
+    [_desktopSocket makeRequest: @"play"];
 }
 
 @end

@@ -11,7 +11,7 @@
 
 #import "AppDelegate.h"
 
-void Alert(NSString* message) {
+static void Alert(NSString* message) {
     
     UIViewController* view = [AppDelegate getTopController];
 

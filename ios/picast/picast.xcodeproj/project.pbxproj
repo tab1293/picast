@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F470AADB1B006ECB001BEB87 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F470AADA1B006ECB001BEB87 /* AVKit.framework */; };
+		F4978B0B1B02AC02002A8638 /* NetworkSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F4978B0A1B02AC02002A8638 /* NetworkSocket.m */; };
 		F4C927CE1AF2C8DE007E130A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C927CD1AF2C8DE007E130A /* main.m */; };
 		F4C927D11AF2C8DE007E130A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C927D01AF2C8DE007E130A /* AppDelegate.m */; };
 		F4C927D41AF2C8DE007E130A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C927D31AF2C8DE007E130A /* ViewController.m */; };
@@ -30,6 +31,8 @@
 
 /* Begin PBXFileReference section */
 		F470AADA1B006ECB001BEB87 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
+		F4978B091B02AB9A002A8638 /* NetworkSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetworkSocket.h; sourceTree = "<group>"; };
+		F4978B0A1B02AC02002A8638 /* NetworkSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkSocket.m; sourceTree = "<group>"; };
 		F4B7950E1AFB287000366973 /* Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		F4C927C81AF2C8DE007E130A /* picast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = picast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4C927CC1AF2C8DE007E130A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -100,6 +103,8 @@
 				F4C927DA1AF2C8DE007E130A /* LaunchScreen.xib */,
 				F4C927CB1AF2C8DE007E130A /* Supporting Files */,
 				F4B7950E1AFB287000366973 /* Utils.h */,
+				F4978B091B02AB9A002A8638 /* NetworkSocket.h */,
+				F4978B0A1B02AC02002A8638 /* NetworkSocket.m */,
 			);
 			path = picast;
 			sourceTree = "<group>";
@@ -232,6 +237,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4C927D41AF2C8DE007E130A /* ViewController.m in Sources */,
+				F4978B0B1B02AC02002A8638 /* NetworkSocket.m in Sources */,
 				F4C927D11AF2C8DE007E130A /* AppDelegate.m in Sources */,
 				F4C9280F1AF43AF1007E130A /* NetworkRunner.m in Sources */,
 				F4C927CE1AF2C8DE007E130A /* main.m in Sources */,

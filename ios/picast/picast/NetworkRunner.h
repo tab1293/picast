@@ -11,9 +11,10 @@
 
 @interface NetworkRunner : NSObject
 
++ (void)initConnection;
++ (void)selectVideo:(NSString*)videoURL;
++ (void)playVideo;
 + (void)broadcast;
-+ (void)connect;
-+ (void)disconnect;
 
 @end
 

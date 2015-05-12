@@ -9,7 +9,7 @@
 @import AVFoundation;
 #import "ViewController.h"
 #import "NetworkRunner.h"
-// #import "Utils.h"
+#import "Utils.h"
 
 @interface ViewController ()
 
@@ -44,7 +44,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     AVPlayerViewController* destination = (AVPlayerViewController*)segue.destinationViewController;
-    NSURL* url = [[NSURL alloc] initWithString: @"http://www.ebookfrenzy.com/ios_book/movie/movie.mov"];
+    NSURL* url = [[NSURL alloc] initWithString: @"http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8"];
     destination.player = [[AVPlayer alloc] initWithURL: url];
 }
 
@@ -53,18 +53,9 @@
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+        
     NSString* string = [NSString stringWithFormat: @"Selected Row: %lu", (unsigned long)[indexPath indexAtPosition: 1]];
-    UIViewController* view = self;
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Notice"
-                                                                   message:string
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                          handler:^(UIAlertAction * action) {}];
-    
-    [alert addAction:defaultAction];
-    [view presentViewController:alert animated:YES completion:nil];
+    Alert(string);
     
     return indexPath;
 }
