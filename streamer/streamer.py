@@ -15,12 +15,18 @@ class Streamer():
         self.state = None
 
 
+#standard{access=livehttp{seglen=10,delsegs=false,numsegs=0,index=/home/tom/picast/streamer/mystream.m3u8,index-url=http://localhost/mystream-########.ts},mux=ts{use-key-frames},dst=/home/tom/picast/streamer/live/mystream-########.ts}
     def setModuleChain(self):
         sm = StandardModule()
+        # access_params = {'seglen': 10, 'numsegs': 0, 'index': '/home/tom/picast/streamer/mystream.m3u8', 'index-url':'http://localhost/mystream-########.ts'}
+        # sm.setAccess('livehttp', access_params)
+        # access_params = {'mime': 'video/mp4'}
         sm.setAccess('http')
         sm.setMux('ts')
         sm.setDst(':8080')
+        # sm.setDst('/home/tom/picast/streamer/live/mystream-########.ts')
         self.default_chain = Chain()
+        print(str(self.default_chain))
         self.default_chain.addModule(sm)
 
 

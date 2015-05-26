@@ -1,0 +1,20 @@
+body {
+    background-color: #18191E;
+}
+
+#container: {
+    margin: 10px;
+}
+
+.poster {
+    width: 240px;
+    height: 356px;
+    margin-bottom: 10px;
+}
+
+.poster:hover {
+    cursor: pointer;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #4196E5;
+}

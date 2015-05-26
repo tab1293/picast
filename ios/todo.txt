@@ -1,1 +1,0 @@
-Code for ios app goes in this folder

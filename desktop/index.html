@@ -1,0 +1,57 @@
+<html>
+<head>
+    <title>Picast</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="js/jquery-fix.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/handlebars-v3.0.3.js"></script>
+    <script id="videoTemplate" type="text/x-handlebars-template">
+        <img id="{{path}}" class="poster" {{#if Poster}} src="{{Poster}}" {{else}} src="./img/no-poster.jpg" {{/if}}></img>
+    </script>
+    <script type="text/javascript">
+        var remote = require('remote');
+        var ipc = require('ipc');
+        var Masonry = require('masonry-layout')
+        var masonry;
+        ipc.send('getVideos');
+
+
+        ipc.on('videos', function(videos) {
+            console.log(JSON.stringify(videos));
+            for(path in videos) {
+                videoInfo = videos[path];
+                videoInfo['path'] = path;
+                var template = $('#videoTemplate').html();
+                var video = Handlebars.compile(template);
+                $('#container').append(video(videoInfo));
+                var container = document.querySelector('#container');
+                var masonry = new Masonry( container, {
+                  itemSelector: '.poster',
+                  gutter: 20,
+                });
+                masonry.layout();
+            }
+        });
+
+        $(function() {
+            $(document).on('click', '.poster', function() {
+                var videoPath = $(this).attr('id');
+                ipc.send('stream', videoPath);
+            });
+        })
+
+
+    </script>
+    
+</head>
+<body>
+    <h4>Picast</h4>
+    <div style="margin:20px">
+    <div id="container">
+    </div>
+    </div>
+</body>
+</html>
+
