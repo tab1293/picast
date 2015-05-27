@@ -140,15 +140,15 @@ http.createServer(function (req, res) {
     }
 }).listen(PORT);
 
-
 var dgram = require('dgram'); 
+var net = require('net');
 var server = dgram.createSocket("udp4"); 
-server.bind(1234, function() {
-    server.setBroadcast(true);
-});
-
 server.on("message", function(msg, rinfo) {
-    console.log("server got: " + msg + " from " + rinfo.address + ":" + rinfo.port);
-    var msg = "hello";
-    server.send(msg, 0, msg.length, 1234, rinfo.address);
+    console.log("Server got: " + msg + " from " + rinfo.address + ":" + rinfo.port);
+    var response = "I'm right here!";
+    var client = net.connect({port: 1234}, function() { //'connect' listener
+        console.log('Connected to pi!');
+        client.write('Sup pi');
+    });
 });
+server.bind(1234);
