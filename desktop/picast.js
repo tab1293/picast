@@ -47,14 +47,22 @@ module.exports = function Picast()
             if(_data['videos'][filePath] === undefined) {
                 var filename = path.basename(filePath);
                 var movieRegex = /((\w+[\. ])+)([0-9]{4})/;
+                var anotherMovieRegex = /([\w+ ]+)(\([0-9]{4}\))/;
 
                 var tvSeriesRegex = /.+?(?=S\d\dE\d\d)/;
                 var tvSeasonEpisodeRegex = /S\d\dE\d\d/;
 
-                if(filename.match(movieRegex)) {
-                    var match = filename.match(movieRegex);
-                    var title = match[1].replace(/\./g, ' ').trim();
-                    var year = match[match.length-1]
+                if(filename.match(movieRegex) || filename.match(anotherMovieRegex)) {
+                    var match, title, year = "";
+                    if (filename.match(movieRegex)) {
+                        match = filename.match(movieRegex);
+                        title = match[1].replace(/\./g, ' ').trim();
+                        year = match[match.length-1]
+                    } else if (filename.match(anotherMovieRegex)) {
+                        match = filename.match(anotherMovieRegex);
+                        title = match[1].trim();
+                        year = match[2].substring(1, 5);
+                    }
                     metafetch.fetchMovie(title, year, function(movieData) {
                         movieData['mime'] = type;
                         if(!movieData['error']) {
@@ -101,7 +109,6 @@ module.exports = function Picast()
                             cb(data);
                         }
                     });
-
                 }
                 else {
                     var movieData = {'title': filePath}

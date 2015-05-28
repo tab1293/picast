@@ -12,6 +12,10 @@
     </script>
 
     <script id="episodeTemplate" type="text/x-handlebars-template">
+        <img id="{{path}}" class="series" {{#if Poster}} src="{{Poster}}" {{else}} src="./img/no-poster.jpg" {{/if}}></img>
+    </script>
+
+    <script id="episodeTemplate" type="text/x-handlebars-template">
         <img id="{{path}}" class="episode" {{#if Poster}} src="{{Poster}}" {{else}} src="./img/no-poster.jpg" {{/if}}></img>
     </script>
 
