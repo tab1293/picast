@@ -31,6 +31,9 @@ app.on('ready', function() {
     mainWindow.maximize();
     // and load the index.html of the app.
     mainWindow.loadUrl('file://' + __dirname + '/index.html');
+    mainWindow.webContents.on('did-finish-load', function() {
+        mainWindow.webContents.send('videos', picast.getVideos());
+    });
 
     mainWindow.webContents.on('will-navigate', function(event, url) {
         var re = /file:\/\/(.*)$/
@@ -58,12 +61,13 @@ app.on('ready', function() {
     });
 });
 
-ipc.on('getVideos', function(event) {
-  event.sender.send('videos', picast.getVideos());
-});
-
 ipc.on('stream', function(event, videoPath) {
     ffmpeg.createHLS(videoPath);
+});
+
+ipc.on('getPi', function(event) {
+    console.log('Main process getting pi hostname');
+    event.sender.send('piHostname', picast.getPiHostname());
 });
 
 // HTTP server for HLS
@@ -142,13 +146,23 @@ http.createServer(function (req, res) {
 
 var dgram = require('dgram'); 
 var net = require('net');
+var dns = require('dns');
 var server = dgram.createSocket("udp4"); 
 server.on("message", function(msg, rinfo) {
     console.log("Server got: " + msg + " from " + rinfo.address + ":" + rinfo.port);
+    dns.reverse(rinfo.address, function(err, domains) {
+        picast.setPi(domains[0], rinfo.address);
+        mainWindow.webContents.send('piHostname', picast.getPiHostname());
+    })
     var response = "I'm right here!";
-    var client = net.connect({port: 1234}, function() { //'connect' listener
+    var client = net.connect(1234, rinfo.address, function() { //'connect' listener
         console.log('Connected to pi!');
         client.write('Sup pi');
+    });
+
+    client.on('close', function() {
+        console.log('Pi disconnect')
+        mainWindow.webContents.send('piDisconnect');
     });
 });
 server.bind(1234);

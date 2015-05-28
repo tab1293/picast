@@ -9,6 +9,8 @@ module.exports = function Picast()
     // Constructor code
     var _dataPath = __dirname + '/data.json';    
     var _data = _loadData();
+    var _piHostname;
+    var _piAddress;
     
     function _loadData() {
         if(!fs.existsSync(_dataPath)) {
@@ -76,4 +78,13 @@ module.exports = function Picast()
         fs.writeFileSync(_dataPath, JSON.stringify(_data));
 
     };
+
+    this.setPi = function(hostname, address) {
+        _piHostname = hostname;
+        _piAddress = address;
+    };
+
+    this.getPiHostname = function() {
+        return _piHostname;
+    }
 }
