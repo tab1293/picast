@@ -93,6 +93,13 @@ module.exports = function Picast()
                             data[filePath] = tvData;
                             cb(data);
                         }
+                        else {
+                            tvData['title'] = filePath;
+                            _data['videos'][filePath] = tvData;
+                            var data = {}
+                            data[filepath] = movieData;
+                            cb(data);
+                        }
                     });
 
                 }

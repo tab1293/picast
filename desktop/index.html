@@ -10,6 +10,11 @@
     <script id="videoTemplate" type="text/x-handlebars-template">
         <img id="{{path}}" class="poster" {{#if Poster}} src="{{Poster}}" {{else}} src="./img/no-poster.jpg" {{/if}}></img>
     </script>
+
+    <script id="episodeTemplate" type="text/x-handlebars-template">
+        <img id="{{path}}" class="episode" {{#if Poster}} src="{{Poster}}" {{else}} src="./img/no-poster.jpg" {{/if}}></img>
+    </script>
+
     <script type="text/javascript">
         var remote = require('remote');
         var webContents = remote.getCurrentWindow();
@@ -52,25 +57,45 @@
                 ipc.send('getMovieInfo', videoPath);
                 // ipc.send('stream', videoPath);
             });
-        })
 
+            // $('.poster').popover({trigger:'hover'});
+            $('#myTab a:first').tab('show')
+        });
 
     </script>
-    
+
 </head>
 <body>
     <div style="margin:20px">
         <div id="container">
         <div class="row">
             <div class="col-lg-10">
-                <h4>Piast</h4>
+                <h4>Picast</h4>
             </div>
             <div class="col-lg-2">
                 <span id="pi-status" class="label label-danger pull-right">Raspberry pi not connected</span>
             </div>
         </div>
-            <div id="videos">
+            <!-- Navigation Tabs -->
+            <div id="tabs">
+                <ul class="nav nav-tabs" role="tablist" id="myTab">
+                    <li role="presentation" class="active"><a href="#movies" aria-controls="movies" role="tab" data-toggle="tab">Movies</a></li>
+                    <li role="presentation"><a href="#tv" aria-controls="tv" role="tab" data-toggle="tab">TV</a></li>
+                    <li role="presentation"><a href="#other" aria-controls="other" role="tab" data-toggle="tab">Other</a></li>
+                </ul>
             </div>
+
+            <!-- Tab content -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade in active" id="movies">
+                    <!-- Videos -->
+                    <div id="videos"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="tv">...</div>
+                <div role="tabpanel" class="tab-pane fade" id="other">...</div>
+            </div>
+
+
         </div>
     </div>
 </body>

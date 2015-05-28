@@ -18,3 +18,29 @@ body {
     border-width: 1px;
     border-color: #4196E5;
 }
+
+.series {
+    width: 758px;
+    height: 140px;
+    margin-bottom: 10px;
+}
+
+.series:hover {
+    cursor: pointer;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #4196E5;
+}
+
+.episode {
+    width: 400px;
+    height: 225px;
+    margin-bottom: 10px;
+}
+
+.episode:hover {
+    cursor: pointer;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #4196E5;
+}

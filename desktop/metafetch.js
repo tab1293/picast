@@ -43,6 +43,7 @@ module.exports =
         var seriesUrl = "http://thetvdb.com/api/GetSeries.php?seriesname=" + encodeURIComponent(title);
         console.log(seriesUrl);
 
+        // Get series ID from db
         request(seriesUrl, function(error, response, body) {
             var seriesId = "";
             if (response.statusCode == 200) {
@@ -51,9 +52,9 @@ module.exports =
                     seriesId = result["Data"]["Series"][0]["seriesid"][0];
                 });
 
+                // With series ID, season, and episode, get metadata for episode
                 var url = "http://thetvdb.com/api/D485CC105455D10A/series/" +
                     encodeURIComponent(seriesId) + "/default/" + encodeURIComponent(season) + "/" + encodeURIComponent(episode) + "/en.xml";
-                console.log(url);
                 request(url, function(error, response, body) {
                     if (response.statusCode == 200) {
                         console.log(body);
@@ -66,6 +67,8 @@ module.exports =
                         cb({'error': true, 'msg': 'A non 200 error response code occurred'});
                     }
                 });
+            } else {
+                cb({'error': true, 'msg': 'A non 200 error response code occurred'});
             }
         });
     },
