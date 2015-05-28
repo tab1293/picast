@@ -3,8 +3,6 @@ var BrowserWindow = require('browser-window');  // Module to create native brows
 var globalShortcut = require('global-shortcut');
 var fs = require('fs');
 var ipc = require('ipc');
-var FFmpeg = require('./ffmpeg.js')
-var ffmpeg = new FFmpeg();
 var Picast = require('./picast.js');
 var picast = new Picast();
 
@@ -163,10 +161,7 @@ var dns = require('dns');
 var server = dgram.createSocket("udp4"); 
 server.on("message", function(msg, rinfo) {
     console.log("Server got: " + msg + " from " + rinfo.address + ":" + rinfo.port);
-    dns.reverse(rinfo.address, function(err, domains) {
-        picast.setPi(domains[0], rinfo.address);
-        mainWindow.webContents.send('piHostname', picast.getPiHostname());
-    })
+
     var response = "I'm right here!";
     var client = net.connect(1234, rinfo.address, function() { //'connect' listener
         console.log('Connected to pi!');
@@ -177,5 +172,12 @@ server.on("message", function(msg, rinfo) {
         console.log('Pi disconnect')
         mainWindow.webContents.send('piDisconnect');
     });
+
+    dns.reverse(rinfo.address, function(err, domains) {
+        picast.setPi(domains[0], rinfo.address, client);
+        mainWindow.webContents.send('piHostname', picast.getPiHostname());
+    })
+
+
 });
 server.bind(1234);

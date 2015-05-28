@@ -3,7 +3,8 @@ var path = require('path');
 var mime = require('mime');
 var metafetch = require('./metafetch.js');
 var chokidar = require('chokidar');
-var ffmpeg = require('./ffmpeg.js');
+var FFmpeg = require('./ffmpeg.js')
+var ffmpeg = new FFmpeg();
 
 module.exports = function Picast()
 {
@@ -12,6 +13,7 @@ module.exports = function Picast()
     var _data = _loadData();
     var _piHostname;
     var _piAddress;
+    var _piSocket;
 
     // Private members
     function _loadData() {
@@ -115,6 +117,9 @@ module.exports = function Picast()
     };
 
     this.stream = function(path) {
+        console.log("pi streaming");
+        ffmpeg.createHLS(path);
+        _piSocket.write('play');
 
     }
 
@@ -123,9 +128,10 @@ module.exports = function Picast()
         return videos[path];
     }
 
-    this.setPi = function(hostname, address) {
+    this.setPi = function(hostname, address, socket) {
         _piHostname = hostname;
         _piAddress = address;
+        _piSocket = socket;
     };
 
     this.getPiHostname = function() {

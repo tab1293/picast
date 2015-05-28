@@ -29,7 +29,7 @@
         $(function() {
             $(document).on('click', '.stream', function() {
                 console.log('stream ' + $(this).attr('id'));
-                ipc.send()
+                ipc.send('stream', $(this).attr('id'));
             })
         });
 

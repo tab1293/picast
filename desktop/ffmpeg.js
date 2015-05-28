@@ -29,7 +29,9 @@ module.exports = function FFmpeg()
         }
 
         fs.readdirSync(__dirname + "/stream").forEach(function(fileName) {
-            fs.unlinkSync(__dirname + "/stream/" + fileName);
+            if(fileName != ".gitignore"){
+                fs.unlinkSync(__dirname + "/stream/" + fileName);
+            }
         });
 
         var output = __dirname + "/stream/out.m3u8";

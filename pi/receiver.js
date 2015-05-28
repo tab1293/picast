@@ -27,6 +27,10 @@ var server = net.createServer(function(socket) {
     clearInterval(timeout);
     console.log("Interval cleared");
 
+    socket.on('data', function(data) {
+        console.log(data.toString());
+    })
+
     socket.on('close', function() {
         console.log("Connection ended. Should send broadcasts again");
         timeout = setInterval(sendBroadcast, 1000);
