@@ -12,11 +12,22 @@
     </script>
     <script type="text/javascript">
         var remote = require('remote');
+        var webContents = remote.getCurrentWindow();
         var ipc = require('ipc');
         var Masonry = require('masonry-layout')
         var masonry;
-        ipc.send('getVideos');
 
+        ipc.send('getPi');
+
+        ipc.on('piHostname', function(hostname) {
+            if(hostname) {
+                $('#pi-status').removeClass('label-danger').addClass('label-success').text(hostname + " connected");
+            }
+        });
+
+        ipc.on('piDisconnect', function() {
+            $('#pi-status').removeClass('label-success').addClass('label-danger').text("Raspberry pi not connected");
+        })
 
         ipc.on('videos', function(videos) {
             console.log(JSON.stringify(videos));
@@ -25,9 +36,9 @@
                 videoInfo['path'] = path;
                 var template = $('#videoTemplate').html();
                 var video = Handlebars.compile(template);
-                $('#container').append(video(videoInfo));
-                var container = document.querySelector('#container');
-                var masonry = new Masonry( container, {
+                $('#videos').append(video(videoInfo));
+                var videoContainer = document.querySelector('#videos');
+                var masonry = new Masonry( videoContainer, {
                   itemSelector: '.poster',
                   gutter: 20,
                 });
@@ -38,7 +49,8 @@
         $(function() {
             $(document).on('click', '.poster', function() {
                 var videoPath = $(this).attr('id');
-                ipc.send('stream', videoPath);
+                ipc.send('showMoviePage', videoPath);
+                // ipc.send('stream', videoPath);
             });
         })
 
@@ -47,10 +59,19 @@
     
 </head>
 <body>
-    <h4>Picast</h4>
     <div style="margin:20px">
-    <div id="container">
-    </div>
+        <div id="container">
+        <div class="row">
+            <div class="col-lg-10">
+                <h4>Piast</h4>
+            </div>
+            <div class="col-lg-2">
+                <span id="pi-status" class="label label-danger pull-right">Raspberry pi not connected</span>
+            </div>
+        </div>
+            <div id="videos">
+            </div>
+        </div>
     </div>
 </body>
 </html>

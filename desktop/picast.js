@@ -9,7 +9,14 @@ module.exports = function Picast()
     // Constructor code
     var _dataPath = __dirname + '/data.json';
     var _data = _loadData();
+<<<<<<< HEAD
 
+=======
+    var _piHostname;
+    var _piAddress;
+
+    // Private members
+>>>>>>> e2eb38d104b5cf99c1c527e7267593e18176eada
     function _loadData() {
         if(!fs.existsSync(_dataPath)) {
             fs.writeFileSync(_dataPath, '{}');
@@ -109,4 +116,13 @@ module.exports = function Picast()
         fs.writeFileSync(_dataPath, JSON.stringify(_data));
 
     };
+
+    this.setPi = function(hostname, address) {
+        _piHostname = hostname;
+        _piAddress = address;
+    };
+
+    this.getPiHostname = function() {
+        return _piHostname;
+    }
 }
