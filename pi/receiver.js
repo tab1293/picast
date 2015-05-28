@@ -1,5 +1,6 @@
 var net = require('net');
 var dgram = require('dgram');
+var omxplayer = require('./omxplayer.js');
 var broadcastMsg = new Buffer("Where are you?");
 var broadcaster = dgram.createSocket("udp4");
 var desktopAddress = null;
@@ -28,6 +29,16 @@ var server = net.createServer(function(socket) {
     console.log("Interval cleared");
 
     socket.on('data', function(data) {
+        var str = data.toString();
+        switch(str) {
+            case 'play':
+                console.log('Playing');
+                omxplayer.play(desktopAddress);
+                break;
+            case 'pause':
+                console.log('pause');
+
+        }
         console.log(data.toString());
     })
 
