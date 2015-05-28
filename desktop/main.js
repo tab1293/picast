@@ -52,6 +52,13 @@ app.on('ready', function() {
         console.log(mainWindow.webContents.getUrl());
     });
 
+    ipc.on('getMovieInfo', function(event, moviePath) {
+        mainWindow.webContents.loadUrl('file://' + __dirname + '/pages/movieInfo.html');
+        mainWindow.webContents.on('did-finish-load', function() {
+            mainWindow.webContents.send('movieInfo', moviePath, picast.getVideoInfo(moviePath));
+        });
+    });
+
     // Register a 'ctrl+x' shortcut listener.
     var ret = globalShortcut.register('ctrl+r', function() { mainWindow.reload(); })
     var ret = globalShortcut.register('ctrl+shift+i', function() { mainWindow.openDevTools(); })
@@ -67,7 +74,7 @@ app.on('ready', function() {
 });
 
 ipc.on('stream', function(event, videoPath) {
-    ffmpeg.createHLS(videoPath);
+    picast.stream(videoPath);
 });
 
 ipc.on('getPi', function(event) {

@@ -49,7 +49,7 @@
         $(function() {
             $(document).on('click', '.poster', function() {
                 var videoPath = $(this).attr('id');
-                ipc.send('showMoviePage', videoPath);
+                ipc.send('getMovieInfo', videoPath);
                 // ipc.send('stream', videoPath);
             });
         })
