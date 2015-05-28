@@ -3,6 +3,7 @@ var path = require('path');
 var mime = require('mime');
 var metafetch = require('./metafetch.js')
 var chokidar = require('chokidar');
+var ffmpeg = require('./ffmpeg.js');
 
 module.exports = function Picast()
 {
@@ -79,6 +80,15 @@ module.exports = function Picast()
         fs.writeFileSync(_dataPath, JSON.stringify(_data));
 
     };
+
+    this.stream = function(path) {
+
+    }
+
+    this.getVideoInfo = function(path) {
+        var videos = _data['videos'];
+        return videos[path];
+    }
 
     this.setPi = function(hostname, address) {
         _piHostname = hostname;
