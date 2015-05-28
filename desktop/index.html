@@ -12,6 +12,7 @@
     </script>
     <script type="text/javascript">
         var remote = require('remote');
+        var webContents = remote.getCurrentWindow();
         var ipc = require('ipc');
         var Masonry = require('masonry-layout')
         var masonry;
@@ -48,7 +49,8 @@
         $(function() {
             $(document).on('click', '.poster', function() {
                 var videoPath = $(this).attr('id');
-                ipc.send('stream', videoPath);
+                ipc.send('showMoviePage', videoPath);
+                // ipc.send('stream', videoPath);
             });
         })
 

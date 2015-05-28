@@ -47,6 +47,11 @@ app.on('ready', function() {
         }
     });
 
+    ipc.on('showMoviePage', function(event) {
+        mainWindow.webContents.loadUrl('file://' + __dirname + '/pages/movieInfo.html');
+        console.log(mainWindow.webContents.getUrl());
+    });
+
     // Register a 'ctrl+x' shortcut listener.
     var ret = globalShortcut.register('ctrl+r', function() { mainWindow.reload(); })
     var ret = globalShortcut.register('ctrl+shift+i', function() { mainWindow.openDevTools(); })
@@ -69,6 +74,7 @@ ipc.on('getPi', function(event) {
     console.log('Main process getting pi hostname');
     event.sender.send('piHostname', picast.getPiHostname());
 });
+
 
 // HTTP server for HLS
 var http = require('http');

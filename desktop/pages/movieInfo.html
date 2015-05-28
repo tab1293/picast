@@ -1,0 +1,34 @@
+<html>
+<head>
+    <title>Picast</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <script type="text/javascript" src="../js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/handlebars-v3.0.3.js"></script>
+    <script id="videoTemplate" type="text/x-handlebars-template">
+        <img id="{{path}}" class="poster" {{#if Poster}} src="../{Poster}}" {{else}} src="../img/no-poster.jpg" {{/if}}></img>
+    </script>
+    <script type="text/javascript">
+
+
+    </script>
+    
+</head>
+<body>
+    <div style="margin:20px">
+        <div id="container">
+        <div class="row">
+            <div class="col-lg-10">
+                <h4>Piast</h4>
+            </div>
+            <div class="col-lg-2">
+                <span id="pi-status" class="label label-danger pull-right">Raspberry pi not connected</span>
+            </div>
+        </div>
+            <p>Hello</p>
+        </div>
+    </div>
+</body>
+</html>

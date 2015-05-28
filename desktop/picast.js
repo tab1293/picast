@@ -12,6 +12,7 @@ module.exports = function Picast()
     var _piHostname;
     var _piAddress;
     
+    // Private members
     function _loadData() {
         if(!fs.existsSync(_dataPath)) {
             fs.writeFileSync(_dataPath, '{}');
