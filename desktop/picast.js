@@ -1,15 +1,15 @@
 var fs = require('fs');
 var path = require('path');
 var mime = require('mime');
-var metafetch = require('./metafetch.js')
+var metafetch = require('./metafetch.js');
 var chokidar = require('chokidar');
 
 module.exports = function Picast()
 {
     // Constructor code
-    var _dataPath = __dirname + '/data.json';    
+    var _dataPath = __dirname + '/data.json';
     var _data = _loadData();
-    
+
     function _loadData() {
         if(!fs.existsSync(_dataPath)) {
             fs.writeFileSync(_dataPath, '{}');
@@ -25,6 +25,14 @@ module.exports = function Picast()
         return _data['videos'];
     };
 
+    // Function to clean season/episode number for thetvdb API call
+    this.cleanNumber = function(number) {
+        if(number.charAt(0) == '0') {
+            return number.charAt(1);
+        }
+        return number;
+    };
+
     this.addFile = function(filePath, cb) {
         console.log(filePath);
         var type = mime.lookup(filePath);
@@ -33,7 +41,10 @@ module.exports = function Picast()
             if(_data['videos'][filePath] === undefined) {
                 var filename = path.basename(filePath);
                 var movieRegex = /((\w+[\. ])+)([0-9]{4})/;
-                
+
+                var tvSeriesRegex = /.+?(?=S\d\dE\d\d)/;
+                var tvSeasonEpisodeRegex = /S\d\dE\d\d/;
+
                 if(filename.match(movieRegex)) {
                     var match = filename.match(movieRegex);
                     var title = match[1].replace(/\./g, ' ').trim();
@@ -56,6 +67,28 @@ module.exports = function Picast()
                             cb(data);
                         }
                     });
+                } else if(filename.match(tvSeriesRegex)) {
+                    var title = filename.match(tvSeriesRegex)[0];
+                    var seasonEpisode = filename.match(tvSeasonEpisodeRegex);
+                    var season = this.cleanNumber(seasonEpisode[0].substring(1, 3));
+                    var episode = this.cleanNumber(seasonEpisode[0].substring(4, 6));
+
+                    console.log(title);
+                    console.log(season);
+                    console.log(episode);
+
+                    metafetch.fetchTV(title, season, episode, function(tvData) {
+                        tvData['mime'] = type;
+                        if(!tvData['error']) {
+                            tvData['type'] = 'tv';
+                            _data['videos'][filePath] = tvData;
+                            console.log(filePath);
+                            var data = {};
+                            data[filePath] = tvData;
+                            cb(data);
+                        }
+                    });
+
                 }
                 else {
                     var movieData = {'title': filePath}
@@ -64,7 +97,7 @@ module.exports = function Picast()
                     data[filePath] = movieData;
                     cb(data);
                 }
-            } 
+            }
             else {
                 console.log("Already added that video");
             }
