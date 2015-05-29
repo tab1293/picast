@@ -6,7 +6,7 @@ var ipc = require('ipc');
 var Picast = require('./picast.js');
 var picast = new Picast();
 var chokidar = require('chokidar');
-    
+
 
 // Report crashes to our server.
 require('crash-reporter').start();
@@ -16,7 +16,7 @@ require('crash-reporter').start();
 var mainWindow = null;
 
 // var watcher = chokidar.watch();
-// watcher.on('add', function(path) { 
+// watcher.on('add', function(path) {
 //     console.log('File', path, 'has been added');
 //     // var re = /^*(.*)$/
 //     // var result = path.match(re);
@@ -60,7 +60,7 @@ app.on('ready', function() {
     });
 
     // Watcher Callbacks
-    watcher.on('add', function(path) { 
+    watcher.on('add', function(path) {
         console.log('File', path, 'has been added');
         picast.addFile(path, function(video) {
             console.log(JSON.stringify(video));
@@ -80,7 +80,7 @@ app.on('ready', function() {
     // and load the index.html of the app.
     mainWindow.loadUrl('file://' + __dirname + '/index.html');
     mainWindow.webContents.on('did-finish-load', function() {
-        mainWindow.webContents.send('videos', picast.getVideos());
+        mainWindow.webContents.send('videos', picast.getVideos(), picast.getSeriesManager());
     });
 
     mainWindow.webContents.on('will-navigate', function(event, url) {
@@ -90,7 +90,7 @@ app.on('ready', function() {
             event.preventDefault();
             picast.addFile(decodeURI(result[1]), function(video) {
                 console.log(JSON.stringify(video));
-                mainWindow.webContents.send('videos', video);
+                mainWindow.webContents.send('videos', video, picast.getSeriesManager());
             });
         }
     });

@@ -13,7 +13,7 @@
     </script>
 
     <script id="seriesTemplate" type="text/x-handlebars-template">
-        <img id="{{path}}" class="series" {{#if Poster}} src="{{Poster}}" {{else}} src="./img/no-poster.jpg" {{/if}}></img>
+        <img id="{{path}}" class="series" {{#if banner}} src="{{banner}}" {{else}} src="./img/no-poster.jpg" {{/if}}></img>
     </script>
 
     <script id="episodeTemplate" type="text/x-handlebars-template">
@@ -47,7 +47,7 @@
 
         // });
 
-        ipc.on('videos', function(videos) {
+        ipc.on('videos', function(videos, seriesManager) {
             console.log(JSON.stringify(videos));
             for(path in videos) {
                 videoInfo = videos[path];
@@ -68,17 +68,32 @@
                       gutter: 20,
                     });
                     masonry.layout();
-                } else if(videoInfo['type'] == "tv") {
-                    var template = $('#episodeTemplate').html();
-                    var tv = Handlebars.compile(template);
-                    $('#tv-shows').append(tv(videoInfo));
-                    var tvContainer = document.querySelector('#tv-shows');
-                    var masonry = new Masonry( tvContainer, {
-                        itemSelector: '.episode',
-                        gutter: 20,
-                    });
-                    masonry.layout();
                 }
+                // else if(videoInfo['type'] == "tv") {
+                //     var template = $('#episodeTemplate').html();
+                //     var tv = Handlebars.compile(template);
+                //     $('#tv-shows').append(tv(videoInfo));
+                //     var tvContainer = document.querySelector('#tv-shows');
+                //     var masonry = new Masonry( tvContainer, {
+                //         itemSelector: '.episode',
+                //         gutter: 20,
+                //     });
+                //     masonry.layout();
+                // }
+            }
+
+            $('#tv-shows').empty();
+            for(key in seriesManager) {
+                var series = seriesManager[key];
+                var template = $('#seriesTemplate').html();
+                var seriesBanner = Handlebars.compile(template);
+                $('#tv-shows').append(seriesBanner(series));
+                var seriesContainer = document.querySelector('#tv-shows');
+                var masonry = new Masonry( seriesContainer, {
+                    itemSelector: '.series',
+                    gutter: 20,
+                });
+                masonry.layout();
             }
         });
 
@@ -139,11 +154,11 @@
             <script type="text/javascript">
                 var remote = require('remote');
                 var ipc = require('ipc');
-                
+
                 document.getElementById("uploadBtn").onclick = function () {
                     ipc.send('folderDialog');
                 };
-                
+
             </script>
         </div>
             <!-- Navigation Tabs -->

@@ -19,7 +19,7 @@ module.exports = function Picast()
     function _loadData() {
         if(!fs.existsSync(_dataPath)) {
             fs.writeFileSync(_dataPath, '{}');
-            return {'videos': {}, 'paths': {}};
+            return {'videos': {}, 'paths': {}, 'seriesManager': {}};
         }
         else {
             return JSON.parse(fs.readFileSync(_dataPath));
@@ -27,8 +27,16 @@ module.exports = function Picast()
     }
 
     // Public member functions
+    this.getData = function() {
+        return _data;
+    };
+
     this.getVideos = function() {
         return _data['videos'];
+    };
+
+    this.getSeriesManager = function() {
+        return _data['seriesManager'];
     };
 
     // Function to clean season/episode number for thetvdb API call
@@ -92,20 +100,26 @@ module.exports = function Picast()
                     console.log(season);
                     console.log(episode);
 
-                    metafetch.fetchTV(title, season, episode, function(tvData) {
-                        tvData['mime'] = type;
-                        if(!tvData['error']) {
-                            tvData['type'] = 'tv';
-                            _data['videos'][filePath] = tvData;
+                    metafetch.fetchTV(title, season, episode, function(seriesData, episodeData) {
+                        episodeData['mime'] = type;
+                        if(!episodeData['error']) {
+                            episodeData['type'] = 'tv';
+                            _data['videos'][filePath] = episodeData;
+                            var seriesName = seriesData['seriesName'];
+                            if(_data['seriesManager'][seriesName] == undefined) {
+                                _data['seriesManager'][seriesName] = seriesData;
+                                _data['seriesManager'][seriesName]['episodeList'] = [];
+                            }
+                            _data['seriesManager'][seriesName]['episodeList'].push(filePath);
                             console.log(filePath);
                             var data = {};
-                            data[filePath] = tvData;
+                            data[filePath] = episodeData;
                             cb(data);
                         }
                         else {
-                            tvData['title'] = filePath;
-                            tvData['type'] = 'tv';
-                            _data['videos'][filePath] = tvData;
+                            episodeData['title'] = filePath;
+                            episodeData['type'] = 'tv';
+                            _data['videos'][filePath] = episodeData;
                             var data = {}
                             data[filepath] = movieData;
                             cb(data);
