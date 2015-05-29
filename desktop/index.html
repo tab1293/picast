@@ -52,15 +52,33 @@
             for(path in videos) {
                 videoInfo = videos[path];
                 videoInfo['path'] = path;
-                var template = $('#videoTemplate').html();
-                var video = Handlebars.compile(template);
-                $('#videos').append(video(videoInfo));
-                var videoContainer = document.querySelector('#videos');
-                var masonry = new Masonry( videoContainer, {
-                  itemSelector: '.poster',
-                  gutter: 20,
-                });
-                masonry.layout();
+                if(videoInfo['type'] == "movie" || videoInfo['type'] == "other") {
+                    var tabId = "";
+                    if (videoInfo['type'] == "movie")
+                        tabId = '#videos';
+                    else
+                        tabId = '#other-videos';
+
+                    var template = $('#videoTemplate').html();
+                    var video = Handlebars.compile(template);
+                    $(tabId).append(video(videoInfo));
+                    var videoContainer = document.querySelector(tabId);
+                    var masonry = new Masonry( videoContainer, {
+                      itemSelector: '.poster',
+                      gutter: 20,
+                    });
+                    masonry.layout();
+                } else if(videoInfo['type'] == "tv") {
+                    var template = $('#episodeTemplate').html();
+                    var tv = Handlebars.compile(template);
+                    $('#tv-shows').append(tv(videoInfo));
+                    var tvContainer = document.querySelector('#tv-shows');
+                    var masonry = new Masonry( tvContainer, {
+                        itemSelector: '.episode',
+                        gutter: 20,
+                    });
+                    masonry.layout();
+                }
             }
         });
 
@@ -101,7 +119,7 @@
                 <h3 id="logo">Picast</h3>
             </div>
             <div class="col-lg-2">
-                <span id="pi-status" class="label label-danger pull-right">Raspberry pi not connected</span>                    
+                <span id="pi-status" class="label label-danger pull-right">Raspberry pi not connected</span>
             </div>
         </div>
             <!-- Navigation Tabs -->
@@ -123,8 +141,14 @@
                     <!-- Videos -->
                     <div id="videos"></div>
                 </div>
-                <div role="tabpanel" class="tab-pane fade" id="tv">...</div>
-                <div role="tabpanel" class="tab-pane fade" id="other">...</div>
+                <div role="tabpanel" class="tab-pane fade" id="tv">
+                    <!-- TV shows -->
+                    <div id="tv-shows"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="other">
+                    <!-- Other videos -->
+                    <div id="other-videos"></div>
+                </div>
             </div>
         </div>
         <!-- <div class="row">
@@ -147,7 +171,7 @@
                     <h4 id="movie-title"></h4>
                 </div>
                 <div class="modal-body">
-                    
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

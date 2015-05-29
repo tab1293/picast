@@ -75,6 +75,7 @@ module.exports = function Picast()
                         }
                         else {
                             movieData['title'] = filePath;
+                            movieData['type'] = 'movie';
                             _data['videos'][filePath] = movieData
                             var data = {}
                             data[filePath] = movieData;
@@ -103,6 +104,7 @@ module.exports = function Picast()
                         }
                         else {
                             tvData['title'] = filePath;
+                            tvData['type'] = 'tv';
                             _data['videos'][filePath] = tvData;
                             var data = {}
                             data[filepath] = movieData;
@@ -112,6 +114,7 @@ module.exports = function Picast()
                 }
                 else {
                     var movieData = {'title': filePath}
+                    movieData['type'] = 'other';
                     _data['videos'][filePath] = movieData;
                     var data = {}
                     data[filePath] = movieData;
