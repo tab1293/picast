@@ -52,6 +52,8 @@ body {
     border-width: 1px;
     border-color: #4196E5;
 
+}
+
 #logo {
     margin-top: 0px;
     color: white;
@@ -89,5 +91,6 @@ body {
 
 #controls-container i {
     margin-top: 5px;
+    padding-right: 10px;
     color: white;
 }

@@ -39,13 +39,13 @@
             $('#pi-status').removeClass('label-success').addClass('label-danger').text("Raspberry pi not connected");
         });
 
-        ipc.on('movieInfo', function(moviePath, movieInfo) {
-            $("#pi-stream").data('path', moviePath);
-            $('#movie-title').text(movieInfo['Title']);
-            console.log(JSON.stringify(movieInfo));
-            $("#movie-info").modal();
+        // ipc.on('movieInfo', function(moviePath, movieInfo) {
+        //     $("#pi-stream").data('path', moviePath);
+        //     $('#movie-title').text(movieInfo['Title']);
+        //     console.log(JSON.stringify(movieInfo));
+        //     $("#movie-info").modal();
 
-        });
+        // });
 
         ipc.on('videos', function(videos) {
             console.log(JSON.stringify(videos));
@@ -127,16 +127,6 @@
                 <div role="tabpanel" class="tab-pane fade" id="other">...</div>
             </div>
         </div>
-        <!-- <div class="row">
-            <div style="text-align:center"class="col-lg-12">
-                <h4 style="color:white;">Drag and Drop video files to add!</h4>
-            </div>
-        </div> -->
-        <nav id="bottom-nav" class="navbar navbar-default navbar-fixed-bottom">
-            <div id="controls-container" class="container">
-                <i id="play-pause" class="fa fa-play fa-3x"></i>
-            </div>
-        </nav>
     </div>
 
     <div id="movie-info" class="modal fade">
