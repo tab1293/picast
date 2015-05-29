@@ -3,16 +3,43 @@
     <title>Picast</title>
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <link rel="stylesheet" type="text/css" href="../css/movieInfo.css">
     <script type="text/javascript" src="../js/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="../js/jquery-fix.js"></script>
     <script type="text/javascript" src="../js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../js/handlebars-v3.0.3.js"></script>
     <script id="movieInfoTemplate" type="text/x-handlebars-template">
-        <img class="poster" {{#if Poster}} src="{{Poster}}" {{else}} src="./img/no-poster.jpg" {{/if}}></img>
-        <div class="info">
-            <div class="title">{{Title}}</div>
+        <div class="col-lg-8 col-lg-offset-2">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3>{{Title}}</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <img style="float:left;" class="poster" {{#if Poster}} src="{{Poster}}" {{else}} src="./img/no-poster.jpg" {{/if}}></img>
+                </div>
+                <div style="float:left" class="col-lg-7 info">
+                     <div>Released: {{Released}} &nbsp; - &nbsp; Rated {{Rated}} &nbsp; - &nbsp; Runtime: {{Runtime}} &nbsp;</div>
+                    <div class="genre">{{Genre}}</div>
+                    <div class="rating">IMDb Rating: {{imdbRating}}</div>
+                    <br/>
+                    <div class="plot"><strong>Synopsis:</strong>
+                    <div class="plot">{{Plot}}</div>
+                    <br/>
+                    <div class="actors"><strong>Actors:</strong></div>
+                    <div class="actors">{{Actors}} </div>
+                    <br/>
+                    <div class="actors"><strong>Director:</strong></div>
+                    <div class="actors">{{Director}} </div>
+                    <br/>
+                    <div class="actors"><strong>Written By:</strong></div>
+                    <div class="actors">{{Writer}} </div>
+                    <button id="{{path}}" class="btn btn-success stream-btn pull-right">Stream to Pi</button>
+                </div>
+            </div>
         </div>
-        <button id="{{path}}" class="stream" class="btn btn-success">Stream to Pi</button>
+
     </script>
 
     <script type="text/javascript">
@@ -44,19 +71,15 @@
     <div style="margin:20px">
         <div id="container">
             <div class="row">
-                <div class="col-lg-10">
-                    <h4>Picast</h4>
+                <div id="back-nav" class="col-lg-10">
+                    <img src="../img/back-arrow.png" class="back-arrow" height="40" width="40"/></a>
                 </div>
                 <div class="col-lg-2">
                     <span id="pi-status" class="label label-danger pull-right">Raspberry pi not connected</span>
                 </div>
             </div>
-            <div id="back-nav">
-                <img src="../img/back-arrow.png" class="back-arrow" height="40" width="40"/></a>
-            </div>
-
-            <div id="movie-info">
-
+            <div id="movie-info" class="row">
+                
             </div>
         </div>
     </div>
