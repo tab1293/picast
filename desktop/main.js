@@ -5,6 +5,8 @@ var fs = require('fs');
 var ipc = require('ipc');
 var Picast = require('./picast.js');
 var picast = new Picast();
+var chokidar = require('chokidar');
+    
 
 // Report crashes to our server.
 require('crash-reporter').start();
@@ -12,6 +14,24 @@ require('crash-reporter').start();
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.
 var mainWindow = null;
+
+var watcher = chokidar.watch();
+var evnt = null;
+watcher.on('add', function(path) { 
+    console.log('File', path, 'has been added');
+    // var re = /^*(.*)$/
+    // var result = path.match(re);
+    // if(result) {
+        // event.preventDefault();
+        picast.addFile(path, function(video) {
+            console.log(JSON.stringify(video));
+            evnt.sender.send('videos', video);
+        });
+    // }
+    // else {
+        // console.log("Didn't save\n\n");
+    // }
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
@@ -78,6 +98,16 @@ ipc.on('stream', function(event, videoPath) {
 ipc.on('getPi', function(event) {
     console.log('Main process getting pi hostname');
     event.sender.send('piHostname', picast.getPiHostname());
+});
+
+// Handles Watching Folder Dialog
+ipc.on('folderDialog', function(event) {
+    evnt = event;
+    var dialog = require('dialog');
+    var path = dialog.showOpenDialog({properties: ['openDirectory', 'multiSelections' ]});
+    console.log(path);
+    // watch folder + add all files in folder
+    watcher.add(path);
 });
 
 
