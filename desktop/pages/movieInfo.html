@@ -4,6 +4,7 @@
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/index.css">
     <link rel="stylesheet" type="text/css" href="../css/movieInfo.css">
+    <link rel="stylesheet" type="text/css" href="../font-awesome/css/font-awesome.min.css">
     <script type="text/javascript" src="../js/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="../js/jquery-fix.js"></script>
     <script type="text/javascript" src="../js/bootstrap.min.js"></script>
@@ -45,22 +46,54 @@
     <script type="text/javascript">
         var ipc = require('ipc');
 
+        ipc.send('getPi');
+
+        ipc.on('piHostname', function(hostname) {
+            if(hostname) {
+                $('#pi-status').removeClass('label-danger').addClass('label-success').text(hostname + " connected");
+            }
+        });
+
         ipc.on('movieInfo', function(moviePath, movieData) {
             movieData['path'] = moviePath;
             var template = $('#movieInfoTemplate').html();
             var movieInfoTemplate = Handlebars.compile(template);
             $('#movie-info').html(movieInfoTemplate(movieData));
             console.log(JSON.stringify(movieData));
+            $('#m')
+        }); 
+
+        ipc.on('piNotConnected', function() {
+            alert('Pi not connected!');
+        });
+
+        ipc.on('openControls', function() {
+            $('#control-modal').modal();
         });
 
         $(function() {
-            $(document).on('click', '.stream', function() {
+            $(document).on('click', '.stream-btn', function() {
                 console.log('stream ' + $(this).attr('id'));
-                ipc.send('stream', $(this).attr('id'));
+                ipc.send('startStream', $(this).attr('id'));
             });
 
             $(document).on('click', '.back-arrow', function() {
                 ipc.send('back', $(this).attr('id'));
+            });
+
+            $('#control-modal').on('hidden.bs.modal', function(e) {
+                console.log('stopping stream');
+                ipc.send('stopStream');
+            });
+
+             $(document).on('click', '.pause', function() {
+                $(this).removeClass('pause').addClass('play').text('Play');
+                ipc.send('playPauseStream');
+            });
+
+             $(document).on('click', '.play', function() {
+                $(this).removeClass('play').addClass('pause').text('Pause');
+                ipc.send('playPauseStream');
             });
         });
 
@@ -83,5 +116,20 @@
             </div>
         </div>
     </div>
+
 </body>
+<div id="control-modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Streaming</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Stop Stream</button>
+                <button id="play-pause" type="button" class="btn btn-primary pause">Pause</button>
+            </div>
+        </div>
+    </div>
+</div>
 </html>

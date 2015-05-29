@@ -12,6 +12,7 @@ module.exports = function OMXPlayer(address) {
     });
 
     this.stop = function() {
+        proc.stdin.write('q');
         proc.kill();
     };
 

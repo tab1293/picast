@@ -109,6 +109,10 @@
                 // ipc.send('stream', videoPath);
             });
 
+            $(document).on('click', '#watchFolder', function() {
+                    ipc.send('folderDialog');
+            });
+
             $(document).on('click', '#pi-stream', function() {
                 ipc.send('startStream', $(this).data('path'));
                 $('#play-pause').removeClass('fa-play').addClass('fa-pause');
@@ -189,6 +193,10 @@
                     <div id="other-videos"></div>
                 </div>
             </div>
+            <!-- Add Folder button -->
+        <div class>
+            <button style="margin-bottom:10px" id="watchFolder" class="btn btn-success stream-btn pull-left">+ Folder</button>
+        </div>
         </div>
     </div>
 

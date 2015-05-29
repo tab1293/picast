@@ -5,39 +5,31 @@ var fs = require('fs');
 var ipc = require('ipc');
 var Picast = require('./picast.js');
 var picast = new Picast();
+var dialog = require('dialog');
 var chokidar = require('chokidar');
+<<<<<<< HEAD
 
+=======
+var Menu = require('menu');
+var MenuItem = require('menu-item');
+>>>>>>> f2d3ac3e16ed9e40c2f99c03b8fe7e8fd9d20fe3
 
 // Report crashes to our server.
 require('crash-reporter').start();
 
+// // Set up menu
+// var menu = new Menu();
+// menu.append(new MenuItem({ label: 'Add Folder', click: function() {
+//     var path = dialog.showOpenDialog(mainWindow, {properties: ['openDirectory', 'multiSelections' ]});
+//     console.log(path);
+//     picast.addPath(path);
+//     watcher.add(path); }
+// }));
+
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.
 var mainWindow = null;
-
-// var watcher = chokidar.watch();
-// watcher.on('add', function(path) {
-//     console.log('File', path, 'has been added');
-//     // var re = /^*(.*)$/
-//     // var result = path.match(re);
-//     // if(result) {
-//         // event.preventDefault();
-//     picast.addFile(path, function(video) {
-//         console.log(JSON.stringify(video));
-//         evnt.sender.send('videos', video);
-//     });
-//     // }
-//     // else {
-//         // console.log("Didn't save\n\n");
-//     // }
-// });
-// watcher.on('unlink', function(path) {
-//     console.log('File', path, 'has been removed');
-//     picast.removeFile(path, function(video) {
-//         console.log(JSON.stringify(video));
-//         mainWindow.webContents.reload();
-//     });
-// });
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
@@ -49,6 +41,7 @@ app.on('window-all-closed', function() {
 // initialization and ready for creating browser windows.
 app.on('ready', function() {
     BrowserWindow.addDevToolsExtension(__dirname + '/react-devtools');
+    // Menu.setApplicationMenu(menu);
 
     // Start up watcher
     var watcher = chokidar.watch();
@@ -116,11 +109,8 @@ app.on('ready', function() {
 
     // Handles Watching Folder Dialog
     ipc.on('folderDialog', function(event) {
-        evnt = event;
-        var dialog = require('dialog');
-        var path = dialog.showOpenDialog({properties: ['openDirectory', 'multiSelections' ]});
+        var path = dialog.showOpenDialog(mainWindow, {properties: ['openDirectory', 'multiSelections' ]});
         console.log(path);
-        // [' Users/Riley/Movies ']
         picast.addPath(path);
         // watch folder + add all files in folder
         watcher.add(path);
@@ -136,16 +126,34 @@ app.on('ready', function() {
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         picast.saveData();
+        picast.close();
         mainWindow = null;
     });
 });
 
 ipc.on('startStream', function(event, videoPath) {
-    picast.startStream(videoPath);
+    if(picast.piConnected()) {
+        picast.startStream(videoPath);
+        event.sender.send('openControls');
+    } else {
+        event.sender.send('piNotConnected');
+    }
 });
 
 ipc.on('playPauseStream', function(event) {
-    picast.playPauseStream();
+    if(picast.piConnected()) {
+        picast.playPauseStream();
+    } else {
+        event.sender.send('piNotConnected');
+    }
+});
+
+ipc.on('stopStream', function(event) {
+    if(picast.piConnected()) {
+        picast.stopStream();
+    } else {
+        event.sender.send('piNotConnected');
+    }
 });
 
 ipc.on('getPi', function(event) {
