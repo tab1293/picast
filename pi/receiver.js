@@ -1,7 +1,7 @@
 var net = require('net');
 var dgram = require('dgram');
 var OMXPlayer = require('./omxplayer.js');
-var omxplayer = new OMXPlayer();
+var omxplayer = null;
 var broadcastMsg = new Buffer("Where are you?");
 var broadcaster = dgram.createSocket("udp4");
 var desktopAddress = null;
@@ -31,18 +31,26 @@ var server = net.createServer(function(socket) {
     socket.on('data', function(data) {
         var str = data.toString();
         console.log(str);
-	switch(str) {
-            case 'play':
-                console.log('Playing');
-                console.log(omxplayer);
-		omxplayer.play(desktopAddress);
+	    switch(str) {
+            case 'start':
+                if(omxplayer) {
+                    omxplayer.stop();
+                }
+                omxplayer = new OMXPlayer(desktopAddress);
                 break;
-            case 'pause':
-                console.log('pause');
-
+            case 'playPause':
+                if(omxplayer) {
+                    omxplayer.playPause();
+                }
+                break;
+            case 'stop':
+                if(omxplayer) {  
+                    omxplayer.stop();
+                }
+                break;
         }
         console.log(data.toString());
-    })
+    });
 
     socket.on('close', function() {
         console.log("Connection ended. Should send broadcasts again");

@@ -51,10 +51,11 @@ app.on('ready', function() {
     });
 
     ipc.on('getMovieInfo', function(event, moviePath) {
-        mainWindow.webContents.loadUrl('file://' + __dirname + '/pages/movieInfo.html');
-        mainWindow.webContents.on('did-finish-load', function() {
-            mainWindow.webContents.send('movieInfo', moviePath, picast.getVideoInfo(moviePath));
-        });
+        event.sender.send('movieInfo', moviePath, picast.getVideoInfo(moviePath));
+        // mainWindow.webContents.loadUrl('file://' + __dirname + '/pages/movieInfo.html');
+        // mainWindow.webContents.on('did-finish-load', function() {
+            // mainWindow.webContents.send('movieInfo', moviePath, picast.getVideoInfo(moviePath));
+        // });
     });
 
     // Register a 'ctrl+x' shortcut listener.
@@ -71,8 +72,12 @@ app.on('ready', function() {
     });
 });
 
-ipc.on('stream', function(event, videoPath) {
-    picast.stream(videoPath);
+ipc.on('startStream', function(event, videoPath) {
+    picast.startStream(videoPath);
+});
+
+ipc.on('playPauseStream', function(event) {
+    picast.playPauseStream();
 });
 
 ipc.on('getPi', function(event) {
