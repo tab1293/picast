@@ -100,6 +100,26 @@ app.on('ready', function() {
         });
     });
 
+    ipc.on('getEpisodeInfo', function(event, episodePath) {
+        var epInfo = picast.getVideoInfo(episodePath);
+        epInfo = epInfo['Data']['Episode'][0];
+        var episodeInfo = {
+            'EpisodeName': epInfo['EpisodeName'][0],
+            'EpisodeNumber': epInfo['EpisodeNumber'][0],
+            'FirstAired': epInfo['FirstAired'][0],
+            'Director': epInfo['Director'][0],
+            'Writer': epInfo['Writer'][0], 
+            'Overview': epInfo['Overview'][0],
+            'GuestStars': epInfo['GuestStars'][0],
+            'Poster': picast.getVideoInfo(episodePath)['Poster'],
+            'path': episodePath
+        };
+        mainWindow.webContents.loadUrl('file://' + __dirname + '/pages/tvEpisodeInfo.html');
+        mainWindow.webContents.on('did-finish-load', function() {
+            mainWindow.webContents.send('episodeInfo', episodePath, episodeInfo);
+        });
+    });
+
     // Handles Watching Folder Dialog
     ipc.on('folderDialog', function(event) {
         var path = dialog.showOpenDialog(mainWindow, {properties: ['openDirectory', 'multiSelections' ]});

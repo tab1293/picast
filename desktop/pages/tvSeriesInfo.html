@@ -33,6 +33,9 @@
         });
 
         ipc.on('tvSeriesInfo', function(seriesPath, seriesData, videosData) {
+            // console.log(JSON.stringify(seriesPath));
+            // console.log(JSON.stringify(seriesData));
+            // console.log(JSON.stringify(videosData));
             var template = $('#episodeTemplate').html();
             var episodeTemplate = Handlebars.compile(template);
 
@@ -40,10 +43,11 @@
             $('#series-info').empty();
             episodeList.sort();
             for (path in episodeList) {
-                console.log("===========");
-                console.log(episodeList[path]);
-                console.log("===========");
-                $('#series-info').append(episodeTemplate(videosData[episodeList[path]]));
+                var episodePath = episodeList[path];
+                var episodeInfo = videosData[episodePath];
+                episodeInfo['path'] = episodePath;
+                // console.log(episodeInfo);
+                $('#series-info').append(episodeTemplate(videosData[episodePath]));
                 var episodeContainer = document.querySelector('#series-info');
                 var masonry = new Masonry( episodeContainer, {
                   itemSelector: '.episode',

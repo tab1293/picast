@@ -1,1 +1,129 @@
-<!-- put episode info here -->
+<html>
+<head>
+    <title>Picast</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <link rel="stylesheet" type="text/css" href="../css/episodeInfo.css">
+    <link rel="stylesheet" type="text/css" href="../font-awesome/css/font-awesome.min.css">
+    <script type="text/javascript" src="../js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/handlebars-v3.0.3.js"></script>
+    <script id="tvInfoPage" type="text/x-handlebars-template">
+        <div class="col-lg-8 col-lg-offset-2">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3>{{EpisodeName}}</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-5">
+                    <img style="float:left;" {{#if Poster}} src="{{Poster}}" {{else}} src="./img/no-poster.jpg" {{/if}}></img>
+                </div>
+                <div style="float:left" class="col-lg-7 info">
+                    <div class="episode-number">Episode Number {{EpisodeNumber}}</div>
+                    <br/>
+                    <div class="aired">First Aired: {{FirstAired}}</div>
+                    <br/>
+                    <div class="director">Director: {{Director}}</div>
+                    <div class="writer">Writer: {{Writer}}</div>
+                    <br/>
+                    <div class="overview">Overview: {{Overview}}</div>
+                    <br/>
+                    <button id="{{path}}" class="btn btn-success stream-btn">Stream to Pi</button>
+                </div>
+            </div>
+        </div>
+
+    </script>
+
+    <script type="text/javascript">
+        var ipc = require('ipc');
+
+        ipc.send('getPi');
+
+        ipc.on('piHostname', function(hostname) {
+            if(hostname) {
+                $('#pi-status').removeClass('label-danger').addClass('label-success').text(hostname + " connected");
+            }
+        });
+
+        ipc.on('episodeInfo', function(episodePath, episodeInfo) {
+            console.log(episodeInfo);
+            // movieData['path'] = moviePath;
+            var template = $('#tvInfoPage').html();
+            var tvInfoTemplate = Handlebars.compile(template);
+            $('#episode-info').html(tvInfoTemplate(episodeInfo));
+            // console.log(JSON.stringify(movieData));
+        });
+
+        ipc.on('piNotConnected', function() {
+            alert('Pi not connected!');
+        });
+
+        ipc.on('openControls', function() {
+            $('#control-modal').modal();
+        });
+
+        $(function() {
+            $(document).on('click', '.stream-btn', function() {
+                console.log('stream ' + $(this).attr('id'));
+                ipc.send('startStream', $(this).attr('id'));
+            });
+
+            $(document).on('click', '.back-arrow', function() {
+                ipc.send('back', $(this).attr('id'));
+            });
+
+            $('#control-modal').on('hidden.bs.modal', function(e) {
+                console.log('stopping stream');
+                ipc.send('stopStream');
+            });
+
+             $(document).on('click', '.pause', function() {
+                $(this).removeClass('pause').addClass('play').text('Play');
+                ipc.send('playPauseStream');
+            });
+
+             $(document).on('click', '.play', function() {
+                $(this).removeClass('play').addClass('pause').text('Pause');
+                ipc.send('playPauseStream');
+            });
+        });
+
+    </script>
+
+</head>
+<body>
+    <div style="margin:20px">
+        <div id="container">
+            <div class="row">
+                <div id="back-nav" class="col-lg-10">
+                    <img src="../img/back-arrow.png" class="back-arrow" height="40" width="40"/></a>
+                </div>
+                <div class="col-lg-2">
+                    <span id="pi-status" class="label label-danger pull-right">Raspberry pi not connected</span>
+                </div>
+            </div>
+            <div id="episode-info" class="row">
+
+            </div>
+        </div>
+    </div>
+
+</body>
+<div id="control-modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Streaming</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Stop Stream</button>
+                <button id="play-pause" type="button" class="btn btn-primary pause">Pause</button>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
