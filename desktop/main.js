@@ -13,16 +13,6 @@ var MenuItem = require('menu-item');
 // Report crashes to our server.
 require('crash-reporter').start();
 
-// // Set up menu
-// var menu = new Menu();
-// menu.append(new MenuItem({ label: 'Add Folder', click: function() {
-//     var path = dialog.showOpenDialog(mainWindow, {properties: ['openDirectory', 'multiSelections' ]});
-//     console.log(path);
-//     picast.addPath(path);
-//     watcher.add(path); }
-// }));
-
-
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.
 var mainWindow = null;
@@ -156,9 +146,6 @@ ipc.on('getPi', function(event) {
     console.log('Main process getting pi hostname');
     event.sender.send('piHostname', picast.getPiHostname());
 });
-
-
-
 
 // HTTP server for HLS
 var http = require('http');

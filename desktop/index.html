@@ -39,13 +39,6 @@
             $('#pi-status').removeClass('label-success').addClass('label-danger').text("Raspberry pi not connected");
         });
 
-        // ipc.on('movieInfo', function(moviePath, movieInfo) {
-        //     $("#pi-stream").data('path', moviePath);
-        //     $('#movie-title').text(movieInfo['Title']);
-        //     console.log(JSON.stringify(movieInfo));
-        //     $("#movie-info").modal();
-
-        // });
 
         ipc.on('videos', function(videos, seriesManager) {
             console.log(JSON.stringify(videos));
@@ -145,25 +138,6 @@
             <div class="col-lg-2">
                 <span id="pi-status" class="label label-danger pull-right">Raspberry pi not connected</span>
             </div>
-        </div>
-        <!-- Add Folder button -->
-        <!-- <div class="fileUpload btn btn-primary" style="margin-left:0px; margin-top:2px; margin-bottom: 2px">
-            <span>+ Folder</span>
-            <input type="file" id="ctrl" webkitdirectory directory multiple />
-        </div> -->
-        <input id="uploadFile" style="margin-left:0px; margin-top:2px; margin-bottom: 2px" placeholder="Choose a Folder" disabled="disabled" />
-        <div class="fileUpload btn btn-primary">
-            <span>+</span>
-            <input id="uploadBtn" type="file" class="upload" id="ctrl" webkitdirectory directory multiple />
-            <script type="text/javascript">
-                var remote = require('remote');
-                var ipc = require('ipc');
-
-                document.getElementById("uploadBtn").onclick = function () {
-                    ipc.send('folderDialog');
-                };
-
-            </script>
         </div>
             <!-- Navigation Tabs -->
             <div class="row">
