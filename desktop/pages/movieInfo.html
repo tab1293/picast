@@ -11,10 +11,10 @@
         <img class="poster" {{#if Poster}} src="{{Poster}}" {{else}} src="./img/no-poster.jpg" {{/if}}></img>
         <div class="info">
             <div class="title">{{Title}}</div>
-            <div>
         </div>
         <button id="{{path}}" class="stream" class="btn btn-success">Stream to Pi</button>
     </script>
+
     <script type="text/javascript">
         var ipc = require('ipc');
 
@@ -22,7 +22,7 @@
             movieData['path'] = moviePath;
             var template = $('#movieInfoTemplate').html();
             var movieInfoTemplate = Handlebars.compile(template);
-            $('#movie-info').append(movieInfoTemplate(movieData));
+            $('#movie-info').html(movieInfoTemplate(movieData));
             console.log(JSON.stringify(movieData));
         });
 
@@ -30,7 +30,11 @@
             $(document).on('click', '.stream', function() {
                 console.log('stream ' + $(this).attr('id'));
                 ipc.send('stream', $(this).attr('id'));
-            })
+            });
+
+            $(document).on('click', '.back-arrow', function() {
+                ipc.send('back', $(this).attr('id'));
+            });
         });
 
     </script>
@@ -47,6 +51,10 @@
                     <span id="pi-status" class="label label-danger pull-right">Raspberry pi not connected</span>
                 </div>
             </div>
+            <div id="back-nav">
+                <img src="../img/back-arrow.png" class="back-arrow" height="40" width="40"/></a>
+            </div>
+
             <div id="movie-info">
 
             </div>

@@ -44,3 +44,10 @@ body {
     border-width: 1px;
     border-color: #4196E5;
 }
+
+.back-arrow:hover {
+    cursor: pointer;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #4196E5;
+}
