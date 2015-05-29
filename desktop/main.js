@@ -216,7 +216,14 @@ server.on("message", function(msg, rinfo) {
     });
 
     dns.reverse(rinfo.address, function(err, domains) {
-        picast.setPi(domains[0], rinfo.address, client);
+        var hostname;
+        if(err) {
+            hostname = 'raspberrypi'
+        }
+        else {
+            hostname = domains[0];
+        }
+        picast.setPi(hostname, rinfo.address, client);
         mainWindow.webContents.send('piHostname', picast.getPiHostname());
     })
 
