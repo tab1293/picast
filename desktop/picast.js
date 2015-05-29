@@ -19,7 +19,7 @@ module.exports = function Picast()
     function _loadData() {
         if(!fs.existsSync(_dataPath)) {
             fs.writeFileSync(_dataPath, '{}');
-            return {'videos': {}};
+            return {'videos': {}, 'paths': {}};
         }
         else {
             return JSON.parse(fs.readFileSync(_dataPath));
@@ -75,7 +75,7 @@ module.exports = function Picast()
                         }
                         else {
                             movieData['title'] = filePath;
-                            _data['videos'][filePath] = movieData
+                            _data['videos'][filePath] = movieData;
                             var data = {}
                             data[filePath] = movieData;
                             cb(data);
@@ -124,6 +124,24 @@ module.exports = function Picast()
         }
 
     };
+
+    this.removeFile = function(filePath, cb) {
+        delete _data['videos'][filePath];
+        cb();
+    }
+
+    this.addPath = function(filePath) {
+        _data['paths'][filePath] = "";
+    }
+
+    this.watcherInit = function(cb) {
+        var paths = [];
+        for (p in _data['paths']) {
+            paths.push(p);
+        }
+        console.log(paths+" pineapples");
+        cb(paths);
+    }
 
     this.saveData = function() {
         fs.writeFileSync(_dataPath, JSON.stringify(_data));

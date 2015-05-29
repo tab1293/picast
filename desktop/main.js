@@ -15,23 +15,29 @@ require('crash-reporter').start();
 // be closed automatically when the javascript object is GCed.
 var mainWindow = null;
 
-var watcher = chokidar.watch();
-var evnt = null;
-watcher.on('add', function(path) { 
-    console.log('File', path, 'has been added');
-    // var re = /^*(.*)$/
-    // var result = path.match(re);
-    // if(result) {
-        // event.preventDefault();
-        picast.addFile(path, function(video) {
-            console.log(JSON.stringify(video));
-            evnt.sender.send('videos', video);
-        });
-    // }
-    // else {
-        // console.log("Didn't save\n\n");
-    // }
-});
+// var watcher = chokidar.watch();
+// watcher.on('add', function(path) { 
+//     console.log('File', path, 'has been added');
+//     // var re = /^*(.*)$/
+//     // var result = path.match(re);
+//     // if(result) {
+//         // event.preventDefault();
+//     picast.addFile(path, function(video) {
+//         console.log(JSON.stringify(video));
+//         evnt.sender.send('videos', video);
+//     });
+//     // }
+//     // else {
+//         // console.log("Didn't save\n\n");
+//     // }
+// });
+// watcher.on('unlink', function(path) {
+//     console.log('File', path, 'has been removed');
+//     picast.removeFile(path, function(video) {
+//         console.log(JSON.stringify(video));
+//         mainWindow.webContents.reload();
+//     });
+// });
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
@@ -43,6 +49,30 @@ app.on('window-all-closed', function() {
 // initialization and ready for creating browser windows.
 app.on('ready', function() {
     BrowserWindow.addDevToolsExtension(__dirname + '/react-devtools');
+
+    // Start up watcher
+    var watcher = chokidar.watch();
+    picast.watcherInit(function(paths) {
+        for (i in paths) {
+            watcher.add(paths[i]);
+            console.log(paths[i]+" bananas")
+        }
+    });
+
+    // Watcher Callbacks
+    watcher.on('add', function(path) { 
+        console.log('File', path, 'has been added');
+        picast.addFile(path, function(video) {
+            console.log(JSON.stringify(video));
+            mainWindow.webContents.reload();
+        });
+    });
+    watcher.on('unlink', function(path) {
+        console.log('File', path, 'has been removed');
+        picast.removeFile(path, function() {
+            mainWindow.webContents.reload();
+        });
+    });
 
     // Create the browser window.
     mainWindow = new BrowserWindow({width: 800, height: 600});
@@ -78,6 +108,18 @@ app.on('ready', function() {
         // });
     });
 
+    // Handles Watching Folder Dialog
+    ipc.on('folderDialog', function(event) {
+        evnt = event;
+        var dialog = require('dialog');
+        var path = dialog.showOpenDialog({properties: ['openDirectory', 'multiSelections' ]});
+        console.log(path);
+        // [' Users/Riley/Movies ']
+        picast.addPath(path);
+        // watch folder + add all files in folder
+        watcher.add(path);
+    });
+
     // Register a 'ctrl+x' shortcut listener.
     var ret = globalShortcut.register('ctrl+r', function() { mainWindow.reload(); })
     var ret = globalShortcut.register('ctrl+shift+i', function() { mainWindow.openDevTools(); })
@@ -105,15 +147,7 @@ ipc.on('getPi', function(event) {
     event.sender.send('piHostname', picast.getPiHostname());
 });
 
-// Handles Watching Folder Dialog
-ipc.on('folderDialog', function(event) {
-    evnt = event;
-    var dialog = require('dialog');
-    var path = dialog.showOpenDialog({properties: ['openDirectory', 'multiSelections' ]});
-    console.log(path);
-    // watch folder + add all files in folder
-    watcher.add(path);
-});
+
 
 
 // HTTP server for HLS
