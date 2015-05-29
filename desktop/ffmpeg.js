@@ -35,7 +35,7 @@ module.exports = function FFmpeg()
         });
 
         var output = __dirname + "/stream/out.m3u8";
-        var args = ['-i', input, '-codec:v', 'libx264', '-crf', '22', '-threads', '0', '-codec:a', 'libfdk_aac', '-b:a', '128k', output];
+        var args = ['-i', input, '-hls_list_size', '0', '-codec:v', 'libx264', '-crf', '22', '-threads', '0', '-codec:a', 'libfdk_aac', '-b:a', '128k', output];
         console.log(this.path + " " + JSON.stringify(args));
 
         var proc = spawn(this.path, args);

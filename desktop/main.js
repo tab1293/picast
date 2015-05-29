@@ -110,7 +110,7 @@ http.createServer(function (req, res) {
         res.end();
     }
     else {
-        var filename = __dirname + "/stream/" + uri;
+        var filename = __dirname + "/stream" + uri;
         fs.exists(filename, function (exists) {
             if (!exists) {
                 console.log('file not found: ' + filename);
@@ -144,6 +144,13 @@ http.createServer(function (req, res) {
                         { bufferSize: 64 * 1024 });
                     stream.pipe(res);
                     break;
+                case '.mp4':
+                    res.writeHead(200, { 'Content-Type':
+                        'video/mp4' });
+                    var stream = fs.createReadStream(filename,
+                        { bufferSize: 64 * 1024 });
+                    stream.pipe(res);
+                    break
                 default:
                     console.log('unknown file type: ' +
                         path.extname(uri));
