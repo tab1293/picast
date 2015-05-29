@@ -32,18 +32,21 @@
             $('#pi-status').removeClass('label-success').addClass('label-danger').text("Raspberry pi not connected");
         });
 
-        ipc.on('tvSeriesInfo', function(seriesPath, seriesData, videosData) {
+         ipc.on('tvSeriesInfo', function(seriesPath, seriesData, videosData) {
             // console.log(JSON.stringify(seriesPath));
             // console.log(JSON.stringify(seriesData));
             // console.log(JSON.stringify(videosData));
             var template = $('#episodeTemplate').html();
             var episodeTemplate = Handlebars.compile(template);
-
             var episodeList = seriesData['episodeList'];
             $('#series-info').empty();
             episodeList.sort();
             for (path in episodeList) {
-                $('#series-info').append(episodeTemplate(videosData[episodeList[path]]));
+                var episodePath = episodeList[path];
+                var episodeInfo = videosData[episodePath];
+                episodeInfo['path'] = episodePath;
+                // console.log(episodeInfo);
+                $('#series-info').append(episodeTemplate(videosData[episodePath]));
                 var episodeContainer = document.querySelector('#series-info');
                 var masonry = new Masonry( episodeContainer, {
                   itemSelector: '.episode',
@@ -51,6 +54,7 @@
                 });
             }
         });
+
 
         $(function() {
             $(document).on('click', '.back-arrow', function() {
