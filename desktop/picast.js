@@ -132,7 +132,9 @@ module.exports = function Picast()
 
     this.startStream = function(path) {
         ffmpeg.createHLS(path);
-        _piSocket.write('start');
+        setTimeout(function() {
+            _piSocket.write('start');
+        }, 2000);
     };
 
     this.playPauseStream = function() {
