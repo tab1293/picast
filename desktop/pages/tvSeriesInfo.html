@@ -37,9 +37,14 @@
             var episodeTemplate = Handlebars.compile(template);
 
             var episodeList = seriesData['episodeList'];
+            $('#series-info').empty();
+            episodeList.sort();
             for (path in episodeList) {
+                console.log("===========");
+                console.log(episodeList[path]);
+                console.log("===========");
                 $('#series-info').append(episodeTemplate(videosData[episodeList[path]]));
-                var videoContainer = document.querySelector('#series-info');
+                var episodeContainer = document.querySelector('#series-info');
                 var masonry = new Masonry( episodeContainer, {
                   itemSelector: '.episode',
                   gutter: 20,
