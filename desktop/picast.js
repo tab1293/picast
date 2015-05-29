@@ -145,7 +145,6 @@ module.exports = function Picast()
 
     this.saveData = function() {
         fs.writeFileSync(_dataPath, JSON.stringify(_data));
-
     };
 
     this.startStream = function(path) {

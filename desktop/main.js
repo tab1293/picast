@@ -100,12 +100,18 @@ app.on('ready', function() {
         console.log(mainWindow.webContents.getUrl());
     });
 
+    ipc.on('back', function(event) {
+        console.log("trying to load homepage");
+        mainWindow.webContents.goBack();
+        console.log(mainWindow.webContents.getUrl());
+    });
+
     ipc.on('getMovieInfo', function(event, moviePath) {
-        event.sender.send('movieInfo', moviePath, picast.getVideoInfo(moviePath));
-        // mainWindow.webContents.loadUrl('file://' + __dirname + '/pages/movieInfo.html');
-        // mainWindow.webContents.on('did-finish-load', function() {
-            // mainWindow.webContents.send('movieInfo', moviePath, picast.getVideoInfo(moviePath));
-        // });
+        // event.sender.send('movieInfo', moviePath, picast.getVideoInfo(moviePath));
+        mainWindow.webContents.loadUrl('file://' + __dirname + '/pages/movieInfo.html');
+        mainWindow.webContents.on('did-finish-load', function() {
+            mainWindow.webContents.send('movieInfo', moviePath, picast.getVideoInfo(moviePath));
+        });
     });
 
     // Handles Watching Folder Dialog
@@ -231,10 +237,10 @@ http.createServer(function (req, res) {
     }
 }).listen(PORT);
 
-var dgram = require('dgram'); 
+var dgram = require('dgram');
 var net = require('net');
 var dns = require('dns');
-var server = dgram.createSocket("udp4"); 
+var server = dgram.createSocket("udp4");
 server.on("message", function(msg, rinfo) {
     console.log("Server got: " + msg + " from " + rinfo.address + ":" + rinfo.port);
 
