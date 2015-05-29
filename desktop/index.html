@@ -94,6 +94,10 @@
                 // ipc.send('stream', videoPath);
             });
 
+            $(document).on('click', '.uploadBtn', function() {
+                    ipc.send('folderDialog');
+            });
+
             $(document).on('click', '#pi-stream', function() {
                 ipc.send('startStream', $(this).data('path'));
                 $('#play-pause').removeClass('fa-play').addClass('fa-pause');
@@ -136,15 +140,6 @@
         <div class="fileUpload btn btn-primary">
             <span>+</span>
             <input id="uploadBtn" type="file" class="upload" id="ctrl" webkitdirectory directory multiple />
-            <script type="text/javascript">
-                var remote = require('remote');
-                var ipc = require('ipc');
-                
-                document.getElementById("uploadBtn").onclick = function () {
-                    ipc.send('folderDialog');
-                };
-                
-            </script>
         </div>
             <!-- Navigation Tabs -->
             <div class="row">

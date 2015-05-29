@@ -5,6 +5,7 @@ var fs = require('fs');
 var ipc = require('ipc');
 var Picast = require('./picast.js');
 var picast = new Picast();
+var dialog = require('dialog');
 var chokidar = require('chokidar');
     
 
@@ -14,30 +15,6 @@ require('crash-reporter').start();
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.
 var mainWindow = null;
-
-// var watcher = chokidar.watch();
-// watcher.on('add', function(path) { 
-//     console.log('File', path, 'has been added');
-//     // var re = /^*(.*)$/
-//     // var result = path.match(re);
-//     // if(result) {
-//         // event.preventDefault();
-//     picast.addFile(path, function(video) {
-//         console.log(JSON.stringify(video));
-//         evnt.sender.send('videos', video);
-//     });
-//     // }
-//     // else {
-//         // console.log("Didn't save\n\n");
-//     // }
-// });
-// watcher.on('unlink', function(path) {
-//     console.log('File', path, 'has been removed');
-//     picast.removeFile(path, function(video) {
-//         console.log(JSON.stringify(video));
-//         mainWindow.webContents.reload();
-//     });
-// });
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
@@ -116,9 +93,7 @@ app.on('ready', function() {
 
     // Handles Watching Folder Dialog
     ipc.on('folderDialog', function(event) {
-        evnt = event;
-        var dialog = require('dialog');
-        var path = dialog.showOpenDialog({properties: ['openDirectory', 'multiSelections' ]});
+        var path = dialog.showOpenDialog(mainWindow, {properties: ['openDirectory', 'multiSelections' ]});
         console.log(path);
         // [' Users/Riley/Movies ']
         picast.addPath(path);
