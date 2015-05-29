@@ -7,10 +7,21 @@ var Picast = require('./picast.js');
 var picast = new Picast();
 var dialog = require('dialog');
 var chokidar = require('chokidar');
-    
+var Menu = require('menu');
+var MenuItem = require('menu-item');
 
 // Report crashes to our server.
 require('crash-reporter').start();
+
+// // Set up menu
+// var menu = new Menu();
+// menu.append(new MenuItem({ label: 'Add Folder', click: function() { 
+//     var path = dialog.showOpenDialog(mainWindow, {properties: ['openDirectory', 'multiSelections' ]});
+//     console.log(path);
+//     picast.addPath(path);
+//     watcher.add(path); }
+// }));
+
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.
@@ -26,6 +37,7 @@ app.on('window-all-closed', function() {
 // initialization and ready for creating browser windows.
 app.on('ready', function() {
     BrowserWindow.addDevToolsExtension(__dirname + '/react-devtools');
+    // Menu.setApplicationMenu(menu);
 
     // Start up watcher
     var watcher = chokidar.watch();
@@ -95,7 +107,6 @@ app.on('ready', function() {
     ipc.on('folderDialog', function(event) {
         var path = dialog.showOpenDialog(mainWindow, {properties: ['openDirectory', 'multiSelections' ]});
         console.log(path);
-        // [' Users/Riley/Movies ']
         picast.addPath(path);
         // watch folder + add all files in folder
         watcher.add(path);

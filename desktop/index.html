@@ -94,7 +94,7 @@
                 // ipc.send('stream', videoPath);
             });
 
-            $(document).on('click', '.uploadBtn', function() {
+            $(document).on('click', '#watchFolder', function() {
                     ipc.send('folderDialog');
             });
 
@@ -132,14 +132,8 @@
             </div>
         </div>
         <!-- Add Folder button -->
-        <!-- <div class="fileUpload btn btn-primary" style="margin-left:0px; margin-top:2px; margin-bottom: 2px">
-            <span>+ Folder</span>
-            <input type="file" id="ctrl" webkitdirectory directory multiple />
-        </div> -->
-        <input id="uploadFile" style="margin-left:0px; margin-top:2px; margin-bottom: 2px" placeholder="Choose a Folder" disabled="disabled" />
-        <div class="fileUpload btn btn-primary">
-            <span>+</span>
-            <input id="uploadBtn" type="file" class="upload" id="ctrl" webkitdirectory directory multiple />
+        <div>
+            <button style="margin-bottom:10px" id="watchFolder" class="btn btn-success stream-btn pull-left">+ Folder</button>
         </div>
             <!-- Navigation Tabs -->
             <div class="row">
