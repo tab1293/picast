@@ -1,5 +1,6 @@
 body {
     background-color: #18191E;
+    padding-bottom: 70px; 
 }
 
 #container: {
@@ -45,6 +46,7 @@ body {
     border-color: #4196E5;
 }
 
+<<<<<<< HEAD
 .title{
     color: gray;
     font-size: 30;
@@ -60,4 +62,43 @@ body {
     color: gray;
     text-align: justify;
     font-size: 14;
+=======
+#logo {
+    margin-top: 0px;
+    color: white;
+}
+
+.nav-tabs {
+    border: 0px;
+}
+
+.nav-tabs > li > a:hover{
+    background-color: #303136 !important;
+    border: 0px;
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus{
+    color: white;
+    background-color: #303136;
+    border: 0px;  
+}
+
+#videos {
+    margin-top: 10px;
+} 
+
+#bottom-nav {
+    background-color: #18191E;
+    border: 0px;
+}
+
+#controls-container {
+    text-align: center;
+}
+
+#controls-container i {
+    margin-top: 5px;
+    color: white;
 }
