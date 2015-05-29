@@ -82,6 +82,11 @@
             }
         });
 
+        ipc.on('watchingFolder', function(folderPath) {
+            console.log("\n*** Recieved "+"[' "+folderPath+" ']\n");
+            // CONFIRM :)
+        });
+
         $(function() {
             $(document).on('click', '.poster', function() {
                 var videoPath = $(this).attr('id');
@@ -121,6 +126,25 @@
             <div class="col-lg-2">
                 <span id="pi-status" class="label label-danger pull-right">Raspberry pi not connected</span>
             </div>
+        </div>
+        <!-- Add Folder button -->
+        <!-- <div class="fileUpload btn btn-primary" style="margin-left:0px; margin-top:2px; margin-bottom: 2px">
+            <span>+ Folder</span>
+            <input type="file" id="ctrl" webkitdirectory directory multiple />
+        </div> -->
+        <input id="uploadFile" style="margin-left:0px; margin-top:2px; margin-bottom: 2px" placeholder="Choose a Folder" disabled="disabled" />
+        <div class="fileUpload btn btn-primary">
+            <span>+</span>
+            <input id="uploadBtn" type="file" class="upload" id="ctrl" webkitdirectory directory multiple />
+            <script type="text/javascript">
+                var remote = require('remote');
+                var ipc = require('ipc');
+                
+                document.getElementById("uploadBtn").onclick = function () {
+                    ipc.send('folderDialog');
+                };
+                
+            </script>
         </div>
             <!-- Navigation Tabs -->
             <div class="row">
