@@ -91,7 +91,10 @@ module.exports = function Picast()
                         }
                     });
                 } else if(filename.match(tvSeriesRegex)) {
-                    var title = filename.match(tvSeriesRegex)[0];
+                    var match = filename.match(tvSeriesRegex);
+                    var matchStr = match[0];
+                    matchStr = matchStr.replace(/\./g, ' ');
+                    var title = matchStr;
                     var seasonEpisode = filename.match(tvSeasonEpisodeRegex);
                     var season = this.cleanNumber(seasonEpisode[0].substring(1, 3));
                     var episode = this.cleanNumber(seasonEpisode[0].substring(4, 6));
