@@ -11,9 +11,9 @@ module.exports = function Picast()
     // Constructor code
     var _dataPath = __dirname + '/data.json';
     var _data = _loadData();
-    var _piHostname;
-    var _piAddress;
-    var _piSocket;
+    var _piHostname = null;
+    var _piAddress = null;
+    var _piSocket = null;
 
     // Private members
     function _loadData() {
@@ -151,18 +151,25 @@ module.exports = function Picast()
     };
 
     this.startStream = function(path) {
-        ffmpeg.createHLS(path);
-        setTimeout(function() {
-            _piSocket.write('start');
-        }, 2000);
+        if(_piSocket) {
+            ffmpeg.createHLS(path);
+            setTimeout(function() {
+                _piSocket.write('start');
+            }, 5000);
+        }
     };
 
     this.playPauseStream = function() {
-        _piSocket.write('playPause');
+        if(_piSocket) {
+            _piSocket.write('playPause');
+        }
     };
 
     this.stopStream = function() {
-        _piSocket.write('stop');
+        if(_piSocket) {
+            _piSocket.write('stop');
+            ffmpeg.stop();
+        }
     };
 
     this.getVideoInfo = function(path) {
@@ -178,5 +185,18 @@ module.exports = function Picast()
 
     this.getPiHostname = function() {
         return _piHostname;
+    }
+
+    this.piConnected = function() {
+        if(_piSocket) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    this.close = function() {
+        ffmpeg.stop();
     }
 }

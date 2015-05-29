@@ -34,6 +34,7 @@ var server = net.createServer(function(socket) {
 	    switch(str) {
             case 'start':
                 if(omxplayer) {
+                    console.log('omxplayer exists');
                     omxplayer.stop();
                 }
                 omxplayer = new OMXPlayer(desktopAddress);

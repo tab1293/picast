@@ -122,16 +122,34 @@ app.on('ready', function() {
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         picast.saveData();
+        picast.close();
         mainWindow = null;
     });
 });
 
 ipc.on('startStream', function(event, videoPath) {
-    picast.startStream(videoPath);
+    if(picast.piConnected()) {
+        picast.startStream(videoPath);
+        event.sender.send('openControls');
+    } else {
+        event.sender.send('piNotConnected');
+    }
 });
 
 ipc.on('playPauseStream', function(event) {
-    picast.playPauseStream();
+    if(picast.piConnected()) {
+        picast.playPauseStream();
+    } else {
+        event.sender.send('piNotConnected');
+    }
+});
+
+ipc.on('stopStream', function(event) {
+    if(picast.piConnected()) {
+        picast.stopStream();
+    } else {
+        event.sender.send('piNotConnected');
+    }
 });
 
 ipc.on('getPi', function(event) {
