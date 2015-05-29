@@ -7,12 +7,8 @@ var Picast = require('./picast.js');
 var picast = new Picast();
 var dialog = require('dialog');
 var chokidar = require('chokidar');
-<<<<<<< HEAD
-
-=======
 var Menu = require('menu');
 var MenuItem = require('menu-item');
->>>>>>> f2d3ac3e16ed9e40c2f99c03b8fe7e8fd9d20fe3
 
 // Report crashes to our server.
 require('crash-reporter').start();
