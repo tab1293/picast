@@ -93,6 +93,13 @@ app.on('ready', function() {
         });
     });
 
+    ipc.on('getSeriesInfo', function(event, seriesPath) {
+        mainWindow.webContents.loadUrl('file://' + __dirname + '/pages/tvSeriesInfo.html');
+        mainWindow.webContents.on('did-finish-load', function() {
+            mainWindow.webContents.send('tvSeriesInfo', seriesPath, picast.getSeriesInfo(seriesPath), picast.getVideos());
+        });
+    });
+
     // Handles Watching Folder Dialog
     ipc.on('folderDialog', function(event) {
         var path = dialog.showOpenDialog(mainWindow, {properties: ['openDirectory', 'multiSelections' ]});

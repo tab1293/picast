@@ -191,6 +191,11 @@ module.exports = function Picast()
         return videos[path];
     }
 
+    this.getSeriesInfo = function(path) {
+        var series = _data['seriesManager'];
+        return series[path];
+    }
+
     this.setPi = function(hostname, address, socket) {
         _piHostname = hostname;
         _piAddress = address;

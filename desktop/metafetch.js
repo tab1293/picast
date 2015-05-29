@@ -57,6 +57,7 @@ module.exports =
                     seriesData["seriesName"] = result["Data"]["Series"][0]["SeriesName"][0];
                     seriesData["overview"] = result["Data"]["Series"][0]["Overview"][0];
                     seriesData["banner"] = posterURLbase + result["Data"]["Series"][0]["banner"][0];
+                    seriesData["path"] = seriesData["seriesName"];
                 });
 
                 // With series ID, season, and episode, get metadata for episode

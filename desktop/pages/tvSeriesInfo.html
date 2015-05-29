@@ -1,0 +1,81 @@
+<html>
+<head>
+    <title>Picast</title>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <link rel="stylesheet" type="text/css" href="../css/movieInfo.css">
+    <link rel="stylesheet" type="text/css" href="../font-awesome/css/font-awesome.min.css">
+    <script type="text/javascript" src="../js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/handlebars-v3.0.3.js"></script>
+
+    <script id="episodeTemplate" type="text/x-handlebars-template">
+        <img id="{{path}}" class="episode" {{#if Poster}} src="{{Poster}}" {{else}} src="./img/no-poster.jpg" {{/if}}></img>
+    </script>
+
+    <script type="text/javascript">
+        var ipc = require('ipc');
+
+        var Masonry = require('masonry-layout')
+        var masonry;
+
+        ipc.send('getPi');
+
+        ipc.on('piHostname', function(hostname) {
+            if(hostname) {
+                $('#pi-status').removeClass('label-danger').addClass('label-success').text(hostname + " connected");
+            }
+        });
+
+        ipc.on('piDisconnect', function() {
+            $('#pi-status').removeClass('label-success').addClass('label-danger').text("Raspberry pi not connected");
+        });
+
+        ipc.on('tvSeriesInfo', function(seriesPath, seriesData, videosData) {
+            var template = $('#episodeTemplate').html();
+            var episodeTemplate = Handlebars.compile(template);
+
+            var episodeList = seriesData['episodeList'];
+            for (path in episodeList) {
+                $('#series-info').append(episodeTemplate(videosData[episodeList[path]]));
+                var videoContainer = document.querySelector('#series-info');
+                var masonry = new Masonry( episodeContainer, {
+                  itemSelector: '.episode',
+                  gutter: 20,
+                });
+            }
+        });
+
+        $(function() {
+            $(document).on('click', '.back-arrow', function() {
+                ipc.send('back', $(this).attr('id'));
+            });
+
+            $(document).on('click', '.episode', function() {
+                var episodePath = $(this).attr('id');
+                ipc.send('getEpisodeInfo', episodePath);
+            });
+        });
+
+    </script>
+
+</head>
+<body>
+    <div style="margin:20px">
+        <div id="container">
+            <div class="row">
+                <div id="back-nav" class="col-lg-10">
+                    <img src="../img/back-arrow.png" class="back-arrow" height="40" width="40"/></a>
+                </div>
+                <div class="col-lg-2">
+                    <span id="pi-status" class="label label-danger pull-right">Raspberry pi not connected</span>
+                </div>
+            </div>
+            <div id="series-info" class="row">
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

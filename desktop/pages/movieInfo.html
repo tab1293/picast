@@ -60,8 +60,7 @@
             var movieInfoTemplate = Handlebars.compile(template);
             $('#movie-info').html(movieInfoTemplate(movieData));
             console.log(JSON.stringify(movieData));
-            $('#m')
-        }); 
+        });
 
         ipc.on('piNotConnected', function() {
             alert('Pi not connected!');
@@ -112,7 +111,7 @@
                 </div>
             </div>
             <div id="movie-info" class="row">
-                
+
             </div>
         </div>
     </div>

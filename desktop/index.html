@@ -102,6 +102,11 @@
                 // ipc.send('stream', videoPath);
             });
 
+            $(document).on('click', '.series', function() {
+                var seriesPath = $(this).attr('id');
+                ipc.send('getSeriesInfo', seriesPath);
+            })
+
             $(document).on('click', '#watchFolder', function() {
                     ipc.send('folderDialog');
             });
