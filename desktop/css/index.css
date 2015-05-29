@@ -44,3 +44,20 @@ body {
     border-width: 1px;
     border-color: #4196E5;
 }
+
+.title{
+    color: gray;
+    font-size: 30;
+}
+
+.actors{
+    color: gray;
+
+    font-size: 14;
+}
+
+.plot{
+    color: gray;
+    text-align: justify;
+    font-size: 14;
+}

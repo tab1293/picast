@@ -8,12 +8,43 @@
     <script type="text/javascript" src="../js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../js/handlebars-v3.0.3.js"></script>
     <script id="movieInfoTemplate" type="text/x-handlebars-template">
-        <img class="poster" {{#if Poster}} src="{{Poster}}" {{else}} src="./img/no-poster.jpg" {{/if}}></img>
-        <div class="info">
-            <div class="title">{{Title}}</div>
-            <div>
+        <div id="container">
+            <div class="row">
+                <div class="col-lg-2">
+                </div>
+                <div class="col-lg-3">
+                    <img class="poster" {{#if Poster}} src="{{Poster}}" {{else}} src="./img/no-poster.jpg" {{/if}}></img>
+                </div>
+                <div class="col-lg-5">
+                    <div class="info">
+                         <div> <span class="title">{{Title}}</span> &nbsp;&nbsp; Released: {{Released}} &nbsp; - &nbsp; Rated {{Rated}} &nbsp; - &nbsp; Runtime: {{Runtime}} &nbsp;</div>
+                        <div class="plot">{{Genre}}</div>
+                        <br/>
+                        <div class="plot"><strong>Synopsis:</strong>
+                        <div class="plot">{{Plot}}</div>
+                        <br/>
+                        <div class="actors"><strong>Actors:</strong></div>
+                        <div class="actors">{{Actors}} </div>
+                        <br/>
+                        <div class="actors"><strong>Director:</strong></div>
+                        <div class="actors">{{Director}} </div>
+                        <br/>
+                        <div class="actors"><strong>Written By:</strong></div>
+                        <div class="actors">{{Writer}} </div>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                </div>
+            </div>
         </div>
-        <button id="{{path}}" class="stream" class="btn btn-success">Stream to Pi</button>
+        <div class="row">
+                <div class="col-lg-9">
+                </div>
+                <div class="col-lg-3">
+                    <button id="{{path}}" class="stream" class="btn btn-success">Stream to Pi</button>
+                </div>
+        </div>
+        
     </script>
     <script type="text/javascript">
         var ipc = require('ipc');
