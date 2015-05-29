@@ -15,6 +15,7 @@ body {
 
 .poster:hover {
     cursor: pointer;
+    opacity: 0.4;
     border-style: solid;
     border-width: 1px;
     border-color: #4196E5;
@@ -28,6 +29,7 @@ body {
 
 .series:hover {
     cursor: pointer;
+    opacity: 0.6;
     border-style: solid;
     border-width: 1px;
     border-color: #4196E5;
@@ -41,11 +43,11 @@ body {
 
 .episode:hover {
     cursor: pointer;
+    opacity: 0.4;
     border-style: solid;
     border-width: 1px;
     border-color: #4196E5;
 }
-
 
 .fileUpload {
     position: relative;
@@ -69,8 +71,6 @@ body {
     border-style: solid;
     border-width: 1px;
     border-color: #4196E5;
-
-
 }
 
 #logo {

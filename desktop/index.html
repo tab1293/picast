@@ -9,7 +9,8 @@
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/handlebars-v3.0.3.js"></script>
     <script id="videoTemplate" type="text/x-handlebars-template">
-        <img id="{{path}}" class="poster" {{#if Poster}} src="{{Poster}}" {{else}} src="./img/no-poster.jpg" {{/if}}></img>
+        <img id="{{path}}" class="poster" {{#if Poster}} src="{{Poster}}" {{else}}
+            src="./img/no-poster.jpg" {{/if}}></img>
     </script>
 
     <script id="seriesTemplate" type="text/x-handlebars-template">
@@ -62,17 +63,6 @@
                     });
                     masonry.layout();
                 }
-                // else if(videoInfo['type'] == "tv") {
-                //     var template = $('#episodeTemplate').html();
-                //     var tv = Handlebars.compile(template);
-                //     $('#tv-shows').append(tv(videoInfo));
-                //     var tvContainer = document.querySelector('#tv-shows');
-                //     var masonry = new Masonry( tvContainer, {
-                //         itemSelector: '.episode',
-                //         gutter: 20,
-                //     });
-                //     masonry.layout();
-                // }
             }
 
             $('#tv-shows').empty();
@@ -99,7 +89,6 @@
             $(document).on('click', '.poster', function() {
                 var videoPath = $(this).attr('id');
                 ipc.send('getMovieInfo', videoPath);
-                // ipc.send('stream', videoPath);
             });
 
             $(document).on('click', '.series', function() {

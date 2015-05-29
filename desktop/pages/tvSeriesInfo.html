@@ -43,11 +43,15 @@
             $('#series-info').empty();
             episodeList.sort();
             for (path in episodeList) {
+<<<<<<< HEAD
                 var episodePath = episodeList[path];
                 var episodeInfo = videosData[episodePath];
                 episodeInfo['path'] = episodePath;
                 // console.log(episodeInfo);
                 $('#series-info').append(episodeTemplate(videosData[episodePath]));
+=======
+                $('#series-info').append(episodeTemplate(videosData[episodeList[path]]));
+>>>>>>> 0a31c39... some css changes to movie hovering
                 var episodeContainer = document.querySelector('#series-info');
                 var masonry = new Masonry( episodeContainer, {
                   itemSelector: '.episode',
