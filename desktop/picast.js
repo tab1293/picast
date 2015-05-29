@@ -130,12 +130,20 @@ module.exports = function Picast()
 
     };
 
-    this.stream = function(path) {
-        console.log("pi streaming");
+    this.startStream = function(path) {
         ffmpeg.createHLS(path);
-        _piSocket.write('play');
+        setTimeout(function() {
+            _piSocket.write('start');
+        }, 2000);
+    };
 
-    }
+    this.playPauseStream = function() {
+        _piSocket.write('playPause');
+    };
+
+    this.stopStream = function() {
+        _piSocket.write('stop');
+    };
 
     this.getVideoInfo = function(path) {
         var videos = _data['videos'];

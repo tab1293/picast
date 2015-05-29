@@ -3,6 +3,7 @@
     <title>Picast</title>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css">
     <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="js/jquery-fix.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
@@ -36,7 +37,15 @@
 
         ipc.on('piDisconnect', function() {
             $('#pi-status').removeClass('label-success').addClass('label-danger').text("Raspberry pi not connected");
-        })
+        });
+
+        ipc.on('movieInfo', function(moviePath, movieInfo) {
+            $("#pi-stream").data('path', moviePath);
+            $('#movie-title').text(movieInfo['Title']);
+            console.log(JSON.stringify(movieInfo));
+            $("#movie-info").modal();
+
+        });
 
         ipc.on('videos', function(videos) {
             console.log(JSON.stringify(videos));
@@ -62,6 +71,21 @@
                 // ipc.send('stream', videoPath);
             });
 
+            $(document).on('click', '#pi-stream', function() {
+                ipc.send('startStream', $(this).data('path'));
+                $('#play-pause').removeClass('fa-play').addClass('fa-pause');
+            });
+
+            $(document).on('click', '.fa-pause', function() {
+                ipc.send('playPauseStream', $(this).data('path'));
+                $('#play-pause').removeClass('fa-pause').addClass('fa-play');
+            });
+
+            $(document).on('click', '.fa-play', function() {
+                ipc.send('playPauseStream', $(this).data('path'));
+                $('#play-pause').removeClass('fa-play').addClass('fa-pause');
+            });
+
             // $('.poster').popover({trigger:'hover'});
             $('#myTab a:first').tab('show')
         });
@@ -74,19 +98,23 @@
         <div id="container">
         <div class="row">
             <div class="col-lg-10">
-                <h4>Picast</h4>
+                <h3 id="logo">Picast</h3>
             </div>
             <div class="col-lg-2">
-                <span id="pi-status" class="label label-danger pull-right">Raspberry pi not connected</span>
+                <span id="pi-status" class="label label-danger pull-right">Raspberry pi not connected</span>                    
             </div>
         </div>
             <!-- Navigation Tabs -->
-            <div id="tabs">
-                <ul class="nav nav-tabs" role="tablist" id="myTab">
-                    <li role="presentation" class="active"><a href="#movies" aria-controls="movies" role="tab" data-toggle="tab">Movies</a></li>
-                    <li role="presentation"><a href="#tv" aria-controls="tv" role="tab" data-toggle="tab">TV</a></li>
-                    <li role="presentation"><a href="#other" aria-controls="other" role="tab" data-toggle="tab">Other</a></li>
-                </ul>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="tabs">
+                        <ul class="nav nav-tabs" role="tablist" id="myTab">
+                            <li role="presentation" class="active"><a href="#movies" aria-controls="movies" role="tab" data-toggle="tab">Movies</a></li>
+                            <li role="presentation"><a href="#tv" aria-controls="tv" role="tab" data-toggle="tab">TV</a></li>
+                            <li role="presentation"><a href="#other" aria-controls="other" role="tab" data-toggle="tab">Other</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
 
             <!-- Tab content -->
@@ -98,10 +126,36 @@
                 <div role="tabpanel" class="tab-pane fade" id="tv">...</div>
                 <div role="tabpanel" class="tab-pane fade" id="other">...</div>
             </div>
-
-
         </div>
+        <!-- <div class="row">
+            <div style="text-align:center"class="col-lg-12">
+                <h4 style="color:white;">Drag and Drop video files to add!</h4>
+            </div>
+        </div> -->
+        <nav id="bottom-nav" class="navbar navbar-default navbar-fixed-bottom">
+            <div id="controls-container" class="container">
+                <i id="play-pause" class="fa fa-play fa-3x"></i>
+            </div>
+        </nav>
     </div>
+
+    <div id="movie-info" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 id="movie-title"></h4>
+                </div>
+                <div class="modal-body">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="pi-stream" type="button" class="btn btn-primary">Stream to Pi</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 </body>
 </html>
 
